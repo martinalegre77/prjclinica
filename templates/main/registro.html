@@ -1,0 +1,89 @@
+
+{% extends 'main/base.html' %} 
+
+{% load static %}
+
+{% block bloque_principal %}
+
+    <p class="tit-page">{% block titulo_principal %}Registro de Usuarios{% endblock %}</p>
+
+    <div class='separador3'></div>
+
+    <main id='register'>
+        <form method="post">
+        {% csrf_token %}
+
+            <section id='seccion' role="region" aria-labelledby="user-info">
+                <h2 id="user-info">Datos del Usuario</h2>
+                    <div class="info">
+                        <label for="user">Usuario:</label>
+                        <p>{{ form.username }}</p>
+                    </div>  
+                    <div class="info">
+                        <label for="nombre">Nombre:</label>
+                        <p>{{ form.nombres }}</p>
+                    </div>
+                    <div class="info">
+                        <label for="apellido">Apellido:</label>
+                        <p>{{ form.apellido }}</p>
+                    </div>
+                    <div class="info">
+                        <label for="password">Contraseña Actual:</label>
+                        <p>{{ form.password }}</p>
+                    </div>  
+                    <div class="info">
+                        <label for="newpass">Nueva Contraseña:</label>
+                        <p><input type="password" name="newpass" id="newpass"/></p>
+                        
+                    </div>  
+            {% if medico %}
+                </section>
+                <section id='seccion' role="region" aria-labelledby="prof-info">
+                    <h2 id="prof-info">Datos para Profesionales</h2> 
+                        {% comment %} <div class="info">
+                            <label for="dni">DNI:</label>
+                            <p>{{ form.dni }}</p>
+                        </div>  {% endcomment %}
+                        <div class="info">
+                            <label for="tipo">Tipo Matrícula:</label>
+                            <p>{{ form.tipo_matricula }}</p>
+                        </div>
+                        <div class="info">
+                            <label for="nro">Nro Matrícula:</label>
+                            <p>{{ form.matricula }}</p>
+                        </div>
+                        <div class="info">
+                            <label for="especialidad">Especialidad:</label>
+                            <p>{{ form.especialidad }}</p>
+                        </div>
+                        <div class="info">
+                            <label for="telefono">Teléfono:</label>
+                            <p>{{ form.telefono }}</p>
+                        </div>
+                        <div class="info">
+                            <label for="mail">Email:</label>
+                            <p>{{ form.mail }}</p>
+                        </div>
+                        {% comment %} <div class="info">
+                            <label for="foto">Foto:</label>
+                            <p>{{ form.foto }}</p>
+                        </div> {% endcomment %}
+            {% endif %}
+
+            {% if errors %}
+                {% for error in errors %}
+                    <samp>{{ error }}</samp>
+                {% endfor %}
+            {% else %}
+                <samp></samp>
+            {% endif %}
+
+                <button class='registrar' type="submit">Guardar</button>
+            </section>
+        </form>
+    </main>
+
+    <div class='separador4'></div>
+
+{% endblock %}
+

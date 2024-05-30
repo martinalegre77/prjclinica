@@ -1,0 +1,26 @@
+
+{% extends 'web/base.html' %} 
+
+{% load static %}
+
+{% block bloque_principal %}
+
+    <a href={% url 'scan-aptos' %} class="boton-flotante">Aptos Físicos</a>
+        
+    <p class="tit-page">{% block titulo_principal %}Clinica Municipal para el Deportista{% endblock %}</p>
+
+    <img src="{% static 'img/foto-clinica.jpg' %}" class="img-fluid img-thumbnail mx-auto d-block" alt="Foto Clínica">
+
+    <div class="container-fluid bloque">
+        <p class="lead resenia">
+            Se inauguró en Concordia un centro de salud deportiva, ubicado en el Gimnasio Polifuncional de la ciudad. Esta clínica, financiada con recursos municipales, es la primera en su tipo en la región mesopotámica y ofrece una amplia gama de servicios para atletas y deportistas locales. Entre los servicios disponibles se incluyen evaluaciones físicas, asesoramiento nutricional, atención psicológica deportiva, tratamientos de rehabilitación y la realización de "aptos Físicos". El coordinador de la clínica destacó su importancia para la prevención y el desarrollo atlético, especialmente para aquellos deportistas con menos recursos. 
+        </p>
+        <h5 class="resenia">CHEQUEOS MÉDICOS</h5>
+        <p class="lead resenia">
+            Sobre este punto, el paramédico profesional, Osvaldo Cárdenas, manifestó que “en primer lugar, al paciente le realizamos un chequeo médico completo que consta de un electrocardiograma, pesaje, medición, control de la presión arterial y analizamos los antecedentes patológicos, personales y familiares. En segundo lugar, le hacemos su historia clínica y generamos una base de datos para futuras consultas y controles. El examen dura entre 15 y 20 minutos”.
+        </p>
+    </div>
+
+{% endblock %}
+
+{% comment %} {% block titulo_principal %}Clinica Municipal para el Deportista{% endblock %} {% endcomment %}

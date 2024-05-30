@@ -1,0 +1,21 @@
+
+{% extends 'main/base.html' %} 
+
+{% load static %}
+
+{% block bloque_principal %}
+
+    <a href={% url 'login' %} class="btn btn-primary boton-flotante">Acceder</a>
+        
+    <p class="tit-page">{% block titulo_principal %}Sistema de Aptos Físicos{% endblock %}</p>
+
+    <div class="gallery">
+        <img src='{% static "img/clinica1.jpg" %}' alt="clinica 1">
+        <img src='{% static "img/clinica8.jpg" %}' alt="clinica 2">
+        <img src='{% static "img/clinica3.jpg" %}' alt="clinica 3">
+        <img src='{% static "img/clinica4.jpg" %}' alt="clinica 4">
+        <img src='{% static "img/clinica5.jpg" %}' alt="clinica 5">
+        <img src='{% static "img/clinica6.jpg" %}' alt="clinica 6">
+    </div>
+
+{% endblock %}

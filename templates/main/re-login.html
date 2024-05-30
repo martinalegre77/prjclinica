@@ -1,0 +1,19 @@
+
+{% extends 'main/base.html' %} 
+
+{% load static %}
+
+{% block bloque_principal %}
+
+    <a href={% url 'login' %} class="btn btn-primary boton-flotante">Acceder</a>
+        
+    <p class="tit-page">{% block titulo_principal %}Registro Exitoso!{% endblock %}</p>
+
+    
+    <img src='{% static "img/user_add.png" %}' class="rounded mx-auto d-block not_found" alt="user_add">
+
+    <samp>Debe <kbd>Acceder</kbd> nuevamente con la nueva contraseña</samp>
+
+    {% comment %} <samp>EL usuario <kbd>{{user}}</kbd> se registró correctamente.</samp> {% endcomment %}
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'main/base.html' %} 
+
+{% load static %}
+
+{% block bloque_principal %}
+        
+    <p class="tit-page">{% block titulo_principal %}Gestión de Aptos Físicos{% endblock %}</p>
+    <div class="form-control form-control-lg">
+        <form method='post'>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <br/>
+            <input type='submit' value='Grabar'>
+        </form>
+    </div>
+    <div class='container'>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    </div>
+
+{% endblock %}
+

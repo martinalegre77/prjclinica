@@ -1,0 +1,20 @@
+
+{% extends 'web/base.html' %} 
+
+{% load static %}
+
+{% block bloque_principal %}
+
+    {% comment %} <a href="https://tupagina.com" class="boton-flotante">Aptos Físicos</a> {% endcomment %}
+        
+    <p class="tit-page">{% block titulo_principal %}Aptos Físicos{% endblock %}</p>
+
+    <p class='titulo-scan'>Escaner de Certificados de Aptos Físicos</p>
+
+    <img src="{% static 'img/web-qr.jpg' %}" class="img-fluid img-thumbnail mx-auto d-block" alt="scan-qr">
+
+    <samp>Acerque el certificado a la cámara de manera que se vea completo el <kbd>código QR</kbd>.</samp>
+
+
+{% endblock %}
+

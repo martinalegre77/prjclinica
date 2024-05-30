@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="es">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block titulo %}Clínica Municipal del Deportista{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link id="icono" rel="icon" href="{% static "img/escudo_concordia.jpg" %}">
+    <link rel="stylesheet" href="{% static 'css/styles_main.css' %}">
+</head>
+<body>
+
+    <nav class="primero">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <a href="https://www.concordia.gob.ar/">
+                    <img src='{% static "img/logo-muni.png" %}' alt="Municipalidad de Concordia" width='70%' height='75%'>
+                    </a>
+                </div>
+                <div class="col-6 titulo-nav text-center">
+                    <h1>Clínica Municipal para el Deportista</h1>
+                </div>
+                <div class="col">
+                    
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <nav class="navbar segundo">
+        <span class="fecha"></span>
+    </nav>
+
+    <div>
+    {% block bloque_principal %}
+    
+        <p class="tit-page">{% block titulo_principal %}{% endblock %}</p>
+
+    {% endblock %}
+    </div>
+    
+    {% block footer %}
+    <footer id="footer">
+        
+        <p class="copy">&copy; Desarrollado por <strong><em>@legre</em></strong></p>
+        <p class="copy">Municipalidad de Concordia - 2024 </p>
+        <p class="copy">Mitre 76, Concordia, Entre Ríos</p>
+    </footer>
+    {% endblock %}
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+    <script src='{% static "js/script.js" %}'></script>
+</html>

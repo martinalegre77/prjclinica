@@ -1,0 +1,256 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+* {
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0%;
+    background-color: aliceblue;
+}
+
+.navbar {
+    background-color:#8bc756;
+    height: 120px;
+} 
+
+.navbar img {
+    margin-left: 60px;
+    margin-top: 2px;
+}
+
+.segundo {
+    background-color: #5ba817;
+    height: 40px;
+}
+
+/* FECHA */
+.fecha {
+    font-family: Roboto, Verdana, Geneva, Tahoma, sans-serif;
+    color: #ffffff;
+    margin-left: 85%;
+    padding-right: 5px;
+    letter-spacing: 0.1em;
+    font-size: 12px;
+    margin-top: 0;
+    padding-top: 0;
+}
+
+/* CUERPO PRINCIPAL */
+.tit-page {
+    padding: 0;
+    text-align: center;
+    margin-top: 10px;
+    font-family: "Roboto", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    color: #e0da67;
+    font-size: 36px;
+}
+
+.titulo-scan, .titulo-resultado {
+    padding: 0;
+    text-align: center;
+    margin-top: 10px;
+    font-family: "Roboto", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    color: #8bc756;
+    font-size: 22px;
+}
+
+.titulo-resultado {
+    font-size: 46px !important;
+}
+
+.c-datos {
+    margin: 4rem;
+    margin-left: 35%;
+}
+
+.datos {
+    display: block;
+    margin: 2rem auto;
+    text-align: center;
+    color: green;
+    text-align:left;
+}
+
+.vence {
+    color: red;
+}
+
+
+/* FOOTER */
+#footer{
+    position: relative;
+    width: 100%;
+    bottom: 0;
+    padding: .5rem;
+    background: #ccc;
+}
+
+footer a{
+    text-decoration: none;
+}
+
+/* SOCIAL MEDIA */
+.social{
+    display: flex;
+    max-width: 720px;
+    justify-content: center;
+    flex-wrap: wrap-reverse;
+    gap: .5rem;
+    margin: auto;
+    padding: 1rem;
+}
+
+.social a{
+    width: 4rem;
+    height: 4rem;
+    border-radius: .5rem;
+    background-color: #ccc;
+    background-position: center;
+    background-size: 2.25rem;
+    background-repeat: no-repeat;
+    transition: all .25s ease;
+}
+.social:hover a{
+    bottom: .5rem;
+}
+.social a:hover{
+    background-color: #eee;
+    background-size: 3rem;
+    box-shadow: 0 .2rem .4rem #333;
+}
+/* ICONOS */
+.facebook{
+    background-image: url("../img/facebook.svg");
+}
+.instagram{
+    background-image: url('../img/instagram.svg');
+}
+.youtube{
+    background-image: url('../img/youtube.svg');
+}
+.twitter{
+    background-image: url('../img/twitter.svg');
+}
+
+.copy {
+    margin: 2px;
+}
+
+/* BLOQUE PRINCIPAL */
+
+.resenia {
+    margin: 10px 0.2rem;
+    text-align: justify;
+    padding: 0.2rem;
+}
+
+.bloque {
+    margin-bottom: 4rem;
+}
+
+
+/* BOTON APTOS */
+
+.boton-flotante {
+    position: fixed;
+    top: 35px; /* Ajusta la distancia desde la parte superior */
+    right: 60px; /* Ajusta la distancia desde la derecha */
+    background-color: #c0dc76; /* Cambia el color de fondo del botón */
+    color: #fff; /* Cambia el color del texto del botón */
+    padding: 10px 20px; /* Ajusta el relleno del botón */
+    border-radius: 5px; /* Ajusta el radio de borde del botón */
+    text-decoration: none; /* Elimina la subrayado del texto del botón */
+    z-index: 999; /* Asegura que el botón esté por encima de otros elementos */
+}
+
+.boton-flotante:hover {
+    background-color: #e0da67; /* Cambia el color de fondo del botón al pasar el mouse */
+    color: #6d8052; /* Cambia el color del texto del botón */
+}
+
+
+
+
+
+
+
+
+/* FONTS PARA USAR */
+
+/* .roboto-thin {
+    font-family: "Roboto", sans-serif;
+    font-weight: 100;
+    font-style: normal;
+}
+
+.roboto-light {
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.roboto-regular {
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.roboto-medium {
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+}
+
+.roboto-bold {
+    font-family: "Roboto", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.roboto-black {
+    font-family: "Roboto", sans-serif;
+    font-weight: 900;
+    font-style: normal;
+}
+
+.roboto-thin-italic {
+    font-family: "Roboto", sans-serif;
+    font-weight: 100;
+    font-style: italic;
+}
+
+.roboto-light-italic {
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
+    font-style: italic;
+}
+
+.roboto-regular-italic {
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-style: italic;
+}
+
+.roboto-medium-italic {
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    font-style: italic;
+}
+
+.roboto-bold-italic {
+    font-family: "Roboto", sans-serif;
+    font-weight: 700;
+    font-style: italic;
+}
+
+.roboto-black-italic {
+    font-family: "Roboto", sans-serif;
+    font-weight: 900;
+    font-style: italic;
+} */

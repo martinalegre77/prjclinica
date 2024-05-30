@@ -1,0 +1,17 @@
+
+{% extends 'main/base.html' %} 
+
+{% load static %}
+
+{% block bloque_principal %}
+
+    <a href={% url 'login' %} class="btn btn-primary boton-flotante">Volver</a>
+        
+    <p class="tit-page">{% block titulo_principal %}Usuario no encontrado{% endblock %}</p>
+
+    
+    <img src='{% static "img/user_invalid.png" %}' class="rounded mx-auto d-block not_found" alt="user_not_found">
+
+    <samp>EL usuario <kbd>{{user}}</kbd> no fue encontrado. Verifique que el nombre de usuario y la contraseña fueron ingresados correctamente.</samp>
+
+{% endblock %}
