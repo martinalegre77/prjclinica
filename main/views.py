@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 from django.http import Http404, HttpResponse
 import requests, sqlite3
-from .forms import UsuarioForm
+from .forms import DeportistaForm, UsuarioForm
 from .models import *
 # from django.contrib.auth.decorators import login_required # para autenticacion
 import re
@@ -50,7 +50,7 @@ def login(request, template_name='main/login.html'):
             if user.user_temp:
                 return redirect('registro', id=user.pk)
             else:
-                return redirect('consultar', user.username)
+                return redirect('consultar')
 
         # Set a session value:
         #         request.session["user"] = user.username
@@ -73,70 +73,79 @@ def registro(request, id, template_name='main/registro.html'):
     if request.method == 'GET':
         print('GET')
         form = UsuarioForm(instance=user)
+        return render(request, template_name, {'form': form, 'medico': medico})
     else:
         print('POST')
         errors = []
         form = UsuarioForm(request.POST, instance=user)
-        if form.is_valid():
-            print('Formulario válido')
+        # if form.is_valid():
+            # print('Formulario válido')
         # Validación de datos
-            if len(request.POST.get('nombres')) < 3 :
-                errors.append('Ingrese un nombre válido')
-            elif len(request.POST.get('apellido')) < 3 :
-                errors.append('Ingrese un apellido válido')
-            elif not comprobar_contrasena(request.POST.get('newpass')) :
-                errors.append('La contraseña debe tener al menos una mayúscula, una minúscula, un número y ser de al menos 8 caracteres')
-            elif not medico:
-                # si no es médico guardo los datos
-                print('No es medico')
-                try:
-                    Usuario.objects.filter(id=user.pk).update(password = request.POST.get('newpass'),
-                                                                user_temp = False,
-                                                                apellido = form.cleaned_data['apellido'],
-                                                                nombres = form.cleaned_data['nombres']
-                                                                )
-                    return redirect('re-login')
-                except:
-                    errors.append('Ha ocurrido un error al intentar guardar los datos, intente nuevamente.')
-                    # return render(request, template_name, {'form': form, 'medico': medico, 'errors': errors})
-            # si es médico sigo validando
-            elif not request.POST.get('tipo_matricula'):
-                errors.append('Debe seleccionar un tipo de matrícula')
-            elif not request.POST.get('matricula') or len(request.POST.get('matricula')) < 4:
-                print('Error de matricula')
-                errors.append('Debe ingresar un número de matrícula válido')
-            elif len(request.POST.get('especialidad')) < 6 :
-                errors.append('Debe ingresar una especialidad válida')
-            elif not validar_email(request.POST.get('mail')):
-                errors.append('Debe ingresar una dirección de mail válida')
-            else:
-                try:
-                    print('Intentando grabar')
-                    Usuario.objects.filter(id=user.pk).update(password = request.POST.get('newpass'),
-                                                                        user_temp = False,
-                                                                        apellido = form.cleaned_data['apellido'],
-                                                                        nombres = form.cleaned_data['nombres'],
-                                                                        tipo_matricula = form.cleaned_data['tipo_matricula'],
-                                                                        matricula = form.cleaned_data['matricula'],
-                                                                        especialidad = form.cleaned_data['especialidad'],
-                                                                        telefono = form.cleaned_data['telefono'],
-                                                                        mail = form.cleaned_data['mail']
-                                                                        )
-                    return redirect('re-login')
-                except:
-                    errors.append('Ha ocurrido un error al intentar guardar los datos, intente nuevamente.')
-                    # return render(request, template_name, {'form': form, 'medico': medico, 'errors': errors})
-            return render(request, template_name, {'form': form, 'medico': medico, 'errors': errors})
+        if len(request.POST.get('nombres')) < 3 :
+            errors.append('Ingrese un nombre válido')
+        elif len(request.POST.get('apellido')) < 3 :
+            errors.append('Ingrese un apellido válido')
+        elif not comprobar_contrasena(request.POST.get('newpass')) :
+            errors.append('La contraseña debe tener al menos una mayúscula, una minúscula, un número y ser de al menos 8 caracteres')
+        elif not medico:
+            # si no es médico guardo los datos
+            print('No es medico')
+            try:
+                Usuario.objects.filter(id=user.pk).update(password = request.POST.get('newpass'),
+                                                            user_temp = False,
+                                                            apellido = request.POST.get('apellido'),
+                                                            nombres = request.POST.get('nombres')
+                                                            )
+                return redirect('re-login')
+            except:
+                errors.append('Ha ocurrido un error al intentar guardar los datos, intente nuevamente.')
+                # return render(request, template_name, {'form': form, 'medico': medico, 'errors': errors})
+        # si es médico sigo validando
+        elif not request.POST.get('tipo_matricula'):
+            errors.append('Debe seleccionar un tipo de matrícula')
+        elif not request.POST.get('matricula') or len(request.POST.get('matricula')) < 4:
+            print('Error de matricula')
+            errors.append('Debe ingresar un número de matrícula válido')
+        elif len(request.POST.get('especialidad')) < 6 :
+            errors.append('Debe ingresar una especialidad válida')
+        elif not validar_email(request.POST.get('mail')):
+            errors.append('Debe ingresar una dirección de mail válida')
         else:
-            # Acá no debería entrar nunca
-            print('FORMULARIO NO VALIDO')
-            # return render(request, template_name, {'form': form, 'medico': medico, 'errors': errors})
-    return render(request, template_name, {'form': form, 'medico': medico})
+            try:
+                print('Intentando grabar')
+                Usuario.objects.filter(id=user.pk).update(password = request.POST.get('newpass'),
+                                                                    user_temp = False,
+                                                                    apellido = request.POST.get('apellido'),
+                                                                    nombres = request.POST.get('nombres'),
+                                                                    tipo_matricula = request.POST.get('tipo_matricula'),
+                                                                    matricula = request.POST.get('matricula'),
+                                                                    especialidad = request.POST.get('especialidad'),
+                                                                    telefono = request.POST.get('telefono'),
+                                                                    mail = request.POST.get('mail')
+                                                                    )
+                return redirect('re-login')
+            except:
+                errors.append('Ha ocurrido un error al intentar guardar los datos, intente nuevamente.')
+                # return render(request, template_name, {'form': form, 'medico': medico, 'errors': errors})
+        return render(request, template_name, {'form': form, 'medico': medico, 'errors': errors})
+        # else:
+        #     # Acá no debería entrar nunca
+        #     print('FORMULARIO NO VALIDO')
+        #     # return render(request, template_name, {'form': form, 'medico': medico, 'errors': errors})
+    
 
 
 # @login_required
-def consultar(request, user, template_name='main/consultar.html'):
-    return render(request, template_name, {'user': user})
+def consultar(request, template_name='main/consultar.html'):
+    if request.method == 'POST':
+        deportista = Deportista.objects.filter(dni=request.POST.get('dni'))
+        form = DeportistaForm(instance=deportista)
+        print(deportista)
+
+        return render(request, template_name, {'form': form})
+    else:
+        form = DeportistaForm()
+        return render(request, template_name, {'form': form})
 
 # @login_required
 def ingresar_datos(request):
@@ -152,6 +161,16 @@ def realizar_apto(request, template_name='main/realizar-apto.html'):
 
 def re_login(request, template_name='main/re-login.html'):
     """ Información registrada correctamente"""
+    return render(request, template_name)
+
+
+def instituciones(request, template_name='main/instituciones.html'):
+    """ Lista de Instituciones"""
+    return render(request, template_name)
+
+
+def deportes(request, template_name='main/deportes.html'):
+    """ Lista de Deportes"""
     return render(request, template_name)
 
 

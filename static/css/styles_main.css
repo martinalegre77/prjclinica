@@ -252,3 +252,40 @@ input {
 }
 
 
+/* FORMULARIO CONSULTA */
+.ingreso-dni {
+    margin-top: 2rem;
+}
+
+.btn-consultar {
+    display: flex;
+    justify-content: center;
+}
+
+.consultar {
+    width: 25%;
+    height: 3rem;
+    margin: 3rem;
+    margin-bottom: 1rem;
+    padding: .3rem;
+    font-size: 23px;
+    color: #edf2f8;
+    background: #092954;
+    border: 3px solid #3b3b4f;  
+}
+
+#user-info {
+    margin-bottom: 1rem;
+}
+
+.datos-consulta {
+    display: block;
+    height: 13rem;
+    width: 100%;
+    margin-top: -1rem;
+}
+
+.registrar a {
+    text-decoration: none;
+    color: #edf2f8;
+}

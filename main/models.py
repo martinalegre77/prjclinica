@@ -95,7 +95,7 @@ class Deporte(models.Model):
         verbose_name_plural = 'Deportes'
 
     def __str__(self):
-        return f'Deporte: {self.nombre}'
+        return f'{self.nombre}'
 
 
 class Institucion(models.Model):
@@ -114,7 +114,7 @@ class Institucion(models.Model):
         verbose_name_plural = 'Instituciones'
 
     def __str__(self):
-        return f'Institución: {self.nombre}'
+        return f'{self.nombre}'
 
 
 class Deportista(models.Model):
