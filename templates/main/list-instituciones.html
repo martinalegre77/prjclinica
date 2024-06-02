@@ -1,0 +1,50 @@
+{% extends 'main/base.html' %} 
+
+{% load static %}
+
+{% block bloque_principal %}
+
+    <a href={% url 'consultar' %} class="btn btn-primary boton-flotante">Volver</a>
+        
+    <p class="tit-page">{% block titulo_principal %}Lista de Instituciones{% endblock %}</p>
+
+    <div class='container'>
+
+    <table class='table table-striped table-primary table-hover instituciones'>
+        <thead>
+            <tr class="table-primary">
+                <th>Nombre</th>
+                <th>Dirección</th>
+                <th>Teléfono</th>
+                <th>Email</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        {% for institucion in instituciones %}
+        <tr class="table-primary">
+            <td class="table-primary">{{ institucion.nombre }}</td>
+            {% if institucion.direccion %}
+                <td class="table-primary">{{ institucion.direccion }}</td>
+            {% else %}
+                <td>Sin información</td>
+            {% endif %}
+            {% if institucion.telefono %}
+                <td class="table-primary">{{ institucion.telefono }}</td>
+            {% else %}
+                <td class="table-primary">Sin información</td>
+            {% endif %}
+            {% if institucion.mail %}
+                <td class="table-primary">{{ institucion.mail }}</td>
+            {% else %}
+                <td class="table-primary">Sin información</td>
+            {% endif %}
+            <td class="table-primary"><a href={% url 'editar-institucion' institucion.id %}>Modificar</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <button class='registrar'><a href={% url 'agregar-institucion' %}>Agregar Institución</a></button>
+
+    </div>
+
+{% endblock %}

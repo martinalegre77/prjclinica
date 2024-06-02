@@ -1,8 +1,9 @@
 from django.shortcuts import redirect, render
-from django.http import Http404, HttpResponse
-import requests, sqlite3
-from .forms import DeportistaForm, UsuarioForm
+# from django.http import Http404, HttpResponse
+# import requests, sqlite3
+from .forms import DeporteForm, DeportistaForm, InstitucionForm, UsuarioForm
 from .models import *
+from django.core.exceptions import ObjectDoesNotExist
 # from django.contrib.auth.decorators import login_required # para autenticacion
 import re
 
@@ -99,7 +100,6 @@ def registro(request, id, template_name='main/registro.html'):
                 return redirect('re-login')
             except:
                 errors.append('Ha ocurrido un error al intentar guardar los datos, intente nuevamente.')
-                # return render(request, template_name, {'form': form, 'medico': medico, 'errors': errors})
         # si es médico sigo validando
         elif not request.POST.get('tipo_matricula'):
             errors.append('Debe seleccionar un tipo de matrícula')
@@ -126,13 +126,7 @@ def registro(request, id, template_name='main/registro.html'):
                 return redirect('re-login')
             except:
                 errors.append('Ha ocurrido un error al intentar guardar los datos, intente nuevamente.')
-                # return render(request, template_name, {'form': form, 'medico': medico, 'errors': errors})
         return render(request, template_name, {'form': form, 'medico': medico, 'errors': errors})
-        # else:
-        #     # Acá no debería entrar nunca
-        #     print('FORMULARIO NO VALIDO')
-        #     # return render(request, template_name, {'form': form, 'medico': medico, 'errors': errors})
-    
 
 
 # @login_required
@@ -145,11 +139,13 @@ def consultar(request, template_name='main/consultar.html'):
         return render(request, template_name, {'form': form})
     else:
         form = DeportistaForm()
-        return render(request, template_name, {'form': form})
+        return render(request, template_name)
+    
 
 # @login_required
 def ingresar_datos(request):
     pass
+
 
 # @login_required
 def realizar_apto(request, template_name='main/realizar-apto.html'):
@@ -164,14 +160,80 @@ def re_login(request, template_name='main/re-login.html'):
     return render(request, template_name)
 
 
-def instituciones(request, template_name='main/instituciones.html'):
-    """ Lista de Instituciones"""
-    return render(request, template_name)
+############### INSTITUCIONES ######################
+def listar_instituciones(request, template_name='main/list-instituciones.html'):
+    """ Listar Instituciones"""
+    instituciones = Institucion.objects.all()
+    return render(request, template_name, {'instituciones': instituciones})
 
 
-def deportes(request, template_name='main/deportes.html'):
+def agregar_institucion(request, template_name='main/add-institucion.html'):
+    """ Agregar Institucion"""
+    if request.method == 'POST':
+        form = InstitucionForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return redirect('listar-instituciones')
+    else:
+        form = InstitucionForm()
+    return render(request, template_name, {'form': form})
+
+
+def editar_institucion(request, id, template_name='main/add-institucion.html'):
+    """ Editar Institucion"""
+    form = InstitucionForm()
+    error = None
+    try:
+        institucion = Institucion.objects.get(id=id)
+        if request.method == 'GET':
+            form = InstitucionForm(instance=institucion)
+        else:
+            form = InstitucionForm(request.POST, instance=institucion)
+            if form.is_valid():
+                form.save()
+            return redirect('listar-instituciones')
+    except ObjectDoesNotExist as e: 
+        error = 'No se encontró la institución deseada'
+    return render(request, template_name, {'form': form, 'error': error})
+
+
+############### DEPORTES ######################
+def listar_deportes(request, template_name='main/list-deportes.html'):
     """ Lista de Deportes"""
-    return render(request, template_name)
+    deportes = Deporte.objects.all()
+    return render(request, template_name, {'deportes': deportes})
+
+
+def agregar_deporte(request, template_name='main/add-deporte.html'):
+    """ Agregar Deporte"""
+    if request.method == 'POST':
+        form = DeporteForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return redirect('listar-deportes')
+    else:
+        form = DeporteForm()
+    return render(request, template_name, {'form': form})
+
+
+def editar_deporte(request, id, template_name='main/add-deporte.html'):
+    """ Editar Deporte"""
+    form = DeporteForm()
+    error = None
+    try:
+        deporte = Deporte.objects.get(id=id)
+        if request.method == 'GET':
+            form = DeporteForm(instance=deporte)
+        else:
+            form = DeporteForm(request.POST, instance=deporte)
+            if form.is_valid():
+                form.save()
+            return redirect('listar-deportes')
+    except ObjectDoesNotExist as e: 
+        error = 'No se encontró el deporte deseado'
+    return render(request, template_name, {'form': form, 'error': error})
+
+
 
 
 # -------------------------------------------------------------------------------#

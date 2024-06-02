@@ -243,12 +243,13 @@ input {
 .registrar {
     display: block;
     margin: 40px auto;
-    width: 65%;
+    width: 30%;
     padding: 15px;
     font-size: 23px;
     color: #edf2f8;
     background: #092954;
     border: 3px solid #3b3b4f;  
+
 }
 
 
@@ -288,4 +289,24 @@ input {
 .registrar a {
     text-decoration: none;
     color: #edf2f8;
+}
+
+/* INSTITUCIONES */
+.instituciones {
+    border-style: groove;
+    border-radius: 3rem;
+    margin-top: 4rem;
+    margin-bottom: 5rem;
+}
+
+.separador-add {
+    display: block;
+    height: 402px;
+    width: 100%;
+}
+
+.separador-deportes {
+    display: block;
+    height: 188px;
+    width: 100%;
 }

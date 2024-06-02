@@ -17,7 +17,7 @@
                 
                 <div class="info ingreso-dni">
                     <label for="user">DNI:</label>
-                    <p><input type="text" name="dni" id="dni"/></p>
+                    <p><input type="text" name="dni" id="dni" required></p>
                 </div> 
 
                 {% if medico %}
@@ -36,11 +36,11 @@
 
                 {% comment %} <a href={% url 'instituciones' %} class="btn btn-primary">Instituciones</a> {% endcomment %}
 
-                <button class='registrar'><a href={% url 'instituciones' %}>Instituciones</a></button>
+                <button class='registrar'><a href={% url 'listar-instituciones' %}>Instituciones</a></button>
 
                 <h2 id="user-info">Ir a Deportes</h2>
 
-                <button class='registrar'><a href={% url 'deportes' %}>Deportes</a></button>
+                <button class='registrar'><a href={% url 'listar-deportes' %}>Deportes</a></button>
 
                 {% if errors %}
                     {% for error in errors %}

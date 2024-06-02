@@ -1,0 +1,38 @@
+{% extends 'main/base.html' %} 
+
+{% load static %}
+
+{% block bloque_principal %}
+
+    <a href={% url 'consultar' %} class="btn btn-primary boton-flotante">Volver</a>
+        
+    <p class="tit-page">{% block titulo_principal %}Lista de Deportes{% endblock %}</p>
+
+    <div class='container'>
+
+    <table class='table table-striped table-primary table-hover instituciones'>
+        <thead>
+            <tr class="table-primary">
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        {% for deporte in deportes %}
+        <tr class="table-primary">
+            <td class="table-primary">{{ deporte.nombre }}</td>
+            {% if deporte.descripcion %}
+                <td class="table-primary">{{ deporte.descripcion }}</td>
+            {% else %}
+                <td>Sin información</td>
+            {% endif %}
+            <td class="table-primary"><a href={% url 'editar-deporte' deporte.id %}>Modificar</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <button class='registrar'><a href={% url 'agregar-deporte' %}>Agregar Deporte</a></button>
+
+    </div>
+
+{% endblock %}

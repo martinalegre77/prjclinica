@@ -113,8 +113,8 @@ class Institucion(models.Model):
         verbose_name = 'Institución'
         verbose_name_plural = 'Instituciones'
 
-    def __str__(self):
-        return f'{self.nombre}'
+    # def __str__(self):
+    #     return f'{self.nombre, self.direccion, self.telefono, self.mail}'
 
 
 class Deportista(models.Model):
