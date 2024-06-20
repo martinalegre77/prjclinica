@@ -242,10 +242,10 @@ input {
 
 .registrar {
     display: block;
-    margin: 40px auto;
+    margin: 35px auto;
     width: 30%;
-    padding: 15px;
-    font-size: 23px;
+    padding: 10px;
+    font-size: 20px;
     color: #edf2f8;
     background: #092954;
     border: 3px solid #3b3b4f;  
@@ -264,12 +264,12 @@ input {
 }
 
 .consultar {
-    width: 25%;
+    width: 30%;
     height: 3rem;
     margin: 3rem;
-    margin-bottom: 1rem;
+    margin-bottom: .5rem;
     padding: .3rem;
-    font-size: 23px;
+    font-size: 20px;
     color: #edf2f8;
     background: #092954;
     border: 3px solid #3b3b4f;  
@@ -309,4 +309,52 @@ input {
     display: block;
     height: 188px;
     width: 100%;
+}
+
+
+/* CAMARA */
+
+.habilitarCam, .capturarCam {
+    width: 150px; /* Ancho */
+    height: 30px; /* Alto */
+    line-height: 40px; /* Alinea el texto verticalmente */
+    text-align: center; /* Alinea el texto horizontalmente */
+    background-color: #32435f; /* Color de fondo */
+    color: #edf2f8; /* Color del texto */
+    font-size: 14px; /* Tamaño del texto */
+    text-decoration: none; /* Sin subrayado */
+    border-radius: 3px; /* Bordes redondeados */
+    cursor: pointer; /* Cambia el cursor al pasar por encima */
+    padding: 6px 24px;
+}
+
+.capturarCam {
+    display:none;
+    position: absolute;
+    bottom: -25px; /* Posición del botón abajo del contenedor */
+    left: 50%; /* Posiciona el botón horizontalmente en el centro del contenedor */
+    transform: translateX(-50%); /* Centra el botón horizontalmente */
+    line-height: 20px; /* Alinea el texto verticalmente */
+}
+
+.videoElement {
+    position: fixed;
+    top: 65%; /* Ajusta la distancia desde la parte superior */
+    right: 25%; /* Ajusta la distancia desde la derecha */
+    border-radius: 5px; 
+    z-index: 500; /* Asegura que esté por encima de otros elementos */
+    /*display: flex;
+    /*justify-content: center; /* Centra horizontalmente */
+    /*align-items: center; /* Centra verticalmente */
+}
+
+.canvasElement {
+    position: fixed;
+    top: 65%; /* Ajusta la distancia desde la parte superior */
+    right: 25%; /* Ajusta la distancia desde la derecha */
+    border-radius: 5px; 
+    z-index: 999; /* Asegura que esté por encima de otros elementos */
+    /*display: flex;
+    /*justify-content: center; /* Centra horizontalmente */
+    /*align-items: center; /* Centra verticalmente */
 }

@@ -31,8 +31,8 @@ TIPO_APTO_CHOISE = (
 )
 
 TIPO_MATRICULA_CHOISE = (
-    (1, 'M.N.'),
-    (2, 'M.P.')
+    ('1', 'M.N.'),
+    ('2', 'M.P.')
 )
 
 
@@ -50,12 +50,12 @@ class Usuario(AbstractBaseUser):
     nombres = models.CharField('Nombre', max_length=30, null=True, blank=True)
     medico = models.BooleanField(default=False)
     dni = models.IntegerField('DNI', null=True, blank=True)
-    tipo_matricula = models.CharField('Matrícula', max_length=2, choices=TIPO_MATRICULA_CHOISE, null=True, blank=True)
+    tipo_matricula = models.CharField('Matrícula', max_length=4, choices=TIPO_MATRICULA_CHOISE, null=True, blank=True)
     matricula = models.CharField('Número', max_length=10, null=True, blank=True)
     especialidad = models.CharField('Especialidad', max_length=20, null=True, blank=True)
     telefono = models.IntegerField('Teléfono', null=True, blank=True)
     mail = models.EmailField('Correo Electrónico', max_length=50, null=True, blank=True)
-    foto = models.ImageField('Foto de perfil', upload_to='perfiles/', null=True, blank=True)
+    image = models.ImageField('Foto de perfil', upload_to='images/', null=True, blank=True)
     objects = UsuarioManager()
     # Para alta de usuarios
     USERNAME_FIELD = 'username'

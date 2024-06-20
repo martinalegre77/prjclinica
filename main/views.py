@@ -6,6 +6,8 @@ from .models import *
 from django.core.exceptions import ObjectDoesNotExist
 # from django.contrib.auth.decorators import login_required # para autenticacion
 import re
+from django.core.files.base import ContentFile
+
 
 def comprobar_contrasena(password):
     may = False
@@ -22,7 +24,7 @@ def comprobar_contrasena(password):
             return False
     else:
         return False
-    
+
 
 def validar_email(email):
     pattern = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
@@ -35,7 +37,7 @@ def validar_email(email):
 def index(request, template_name='main/index.html'):
     """ Página de inicio de la clínica"""
     return render(request, template_name)
-    
+
 
 def login(request, template_name='main/login.html'):
     """ Logín para entrar al sistema"""
@@ -58,7 +60,7 @@ def login(request, template_name='main/login.html'):
         #         request.session["dni"] = user.password
         #         request.session['level'] = user.medico
         #         return redirect('registro')
-        
+
 
 def not_found(request, user, template_name='main/not-found.html'):
     """ Usuario no encontrado o datos mal cargados"""
@@ -72,11 +74,9 @@ def registro(request, id, template_name='main/registro.html'):
     user = Usuario.objects.get(id = id)
     medico = user.medico
     if request.method == 'GET':
-        print('GET')
         form = UsuarioForm(instance=user)
         return render(request, template_name, {'form': form, 'medico': medico})
     else:
-        print('POST')
         errors = []
         form = UsuarioForm(request.POST, instance=user)
         # if form.is_valid():
@@ -90,7 +90,6 @@ def registro(request, id, template_name='main/registro.html'):
             errors.append('La contraseña debe tener al menos una mayúscula, una minúscula, un número y ser de al menos 8 caracteres')
         elif not medico:
             # si no es médico guardo los datos
-            print('No es medico')
             try:
                 Usuario.objects.filter(id=user.pk).update(password = request.POST.get('newpass'),
                                                             user_temp = False,
@@ -110,9 +109,12 @@ def registro(request, id, template_name='main/registro.html'):
             errors.append('Debe ingresar una especialidad válida')
         elif not validar_email(request.POST.get('mail')):
             errors.append('Debe ingresar una dirección de mail válida')
+        elif not 'image' in request.FILES:
+            errors.append('Debe tomarse una foto')
         else:
+            image = request.FILES['image']
             try:
-                print('Intentando grabar')
+                user.image.save('foto.png', ContentFile(image.read()))
                 Usuario.objects.filter(id=user.pk).update(password = request.POST.get('newpass'),
                                                                     user_temp = False,
                                                                     apellido = request.POST.get('apellido'),
@@ -130,7 +132,7 @@ def registro(request, id, template_name='main/registro.html'):
 
 
 # @login_required
-def consultar(request, template_name='main/consultar.html'):
+def menu(request, template_name='main/menu.html'):
     if request.method == 'POST':
         deportista = Deportista.objects.filter(dni=request.POST.get('dni'))
         form = DeportistaForm(instance=deportista)

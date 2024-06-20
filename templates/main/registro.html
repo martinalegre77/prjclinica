@@ -10,7 +10,8 @@
     <div class='separador3'></div>
 
     <main id='register'>
-        <form method="post">
+        <form method="post" enctype="multipart/form-data" id="registrationForm">
+        {% comment %} <form method="post"> {% endcomment %}
         {% csrf_token %}
 
             <section id='seccion' role="region" aria-labelledby="user-info">
@@ -27,10 +28,10 @@
                         <label for="apellido">Apellido:</label>
                         <p>{{ form.apellido }}</p>
                     </div>
-                    <div class="info">
+                    {% comment %} <div class="info">
                         <label for="password">Contraseña Actual:</label>
                         <p>{{ form.password }}</p>
-                    </div>  
+                    </div>   {% endcomment %}
                     <div class="info">
                         <label for="newpass">Nueva Contraseña:</label>
                         <p><input type="password" name="newpass" id="newpass"/></p>
@@ -64,10 +65,20 @@
                             <label for="mail">Email:</label>
                             <p>{{ form.mail }}</p>
                         </div>
-                        {% comment %} <div class="info">
+                        <div class="info">
                             <label for="foto">Foto:</label>
-                            <p>{{ form.foto }}</p>
-                        </div> {% endcomment %}
+                            <a href="#" class='habilitarCam' id='habilitar'>Encender Cámara</a>
+                        </div>
+                        <div class='videoElement'>
+                            <video id='videoElement' autoplay='true'></video>
+                            <a href="#" class='capturarCam' id='capturar'>Tomar Foto</a>
+                        </div>
+                        <div class='canvasElement'>
+                            <canvas id='canvasElement' height='200' width='200'></canvas>
+                        </div>
+
+                    <script src='{% static "js/camara.js" %}'></script>
+
             {% endif %}
 
             {% if errors %}
@@ -78,7 +89,7 @@
                 <samp></samp>
             {% endif %}
 
-                <button class='registrar' type="submit">Guardar</button>
+                <button class='registrar' type="submit" id='submit'>Guardar</button>
             </section>
         </form>
     </main>
