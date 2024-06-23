@@ -1,0 +1,27 @@
+{% extends 'main/base.html' %} 
+
+{% load static %}
+
+{% block bloque_principal %}
+
+    {% comment %} <a href="https://tupagina.com" class="boton-flotante">Aptos Físicos</a> {% endcomment %}
+        
+    <p class="tit-page">{% block titulo_principal %}Resultado de la Consulta{% endblock %}</p>
+
+    <div class='separador3'></div>
+
+    <main id='register'>
+        <form>
+
+        {% csrf_token %}
+            <section id='seccion' role="region" aria-labelledby="user-info">
+
+            {{ form.as_p }}
+
+            </section>
+
+        </form>
+    </main>
+
+{% endblock %}
+

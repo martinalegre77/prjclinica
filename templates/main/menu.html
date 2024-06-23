@@ -18,6 +18,11 @@
                 <div class="info ingreso-dni">
                     <label for="user">DNI:</label>
                     <p><input type="text" name="dni" id="dni" required></p>
+                    {% if errors %}
+                        <samp>{{ errors.0 }}</samp>
+                    {% else %}
+                        <samp></samp>
+                    {% endif %}
                 </div> 
 
                 {% if medico %}
@@ -39,14 +44,6 @@
                 <h2 id="user-info">Ir a Deportes</h2>
 
                 <button class='registrar'><a href={% url 'listar-deportes' %}>Deportes</a></button>
-
-                {% if errors %}
-                    {% for error in errors %}
-                        <samp>{{ error }}</samp>
-                    {% endfor %}
-                {% else %}
-                    <samp></samp>
-                {% endif %}
 
             </section>
         </form>

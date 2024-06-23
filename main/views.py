@@ -4,11 +4,15 @@ from django.shortcuts import redirect, render
 from .forms import DeporteForm, DeportistaForm, InstitucionForm, UsuarioForm
 from .models import *
 from django.core.exceptions import ObjectDoesNotExist
-# from django.contrib.auth.decorators import login_required # para autenticacion
+from django.contrib.auth.decorators import login_required # para autenticacion
 import re
 from django.core.files.base import ContentFile
+from django.contrib.auth import login, logout 
+from django.views.decorators.csrf import csrf_protect
+# from django.core.paginator import Paginator # paginación de html
 
 
+############### FUNCIONES ######################
 def comprobar_contrasena(password):
     may = False
     num = False
@@ -34,12 +38,13 @@ def validar_email(email):
         return False
 
 
+############### INDEX - LOGIN ######################
 def index(request, template_name='main/index.html'):
     """ Página de inicio de la clínica"""
     return render(request, template_name)
 
 
-def login(request, template_name='main/login.html'):
+def login_view(request, template_name='main/login.html'):
     """ Logín para entrar al sistema"""
     if request.method == 'GET':
         return render(request, template_name)
@@ -53,7 +58,8 @@ def login(request, template_name='main/login.html'):
             if user.user_temp:
                 return redirect('registro', id=user.pk)
             else:
-                return redirect('consultar')
+                login(request, user)
+                return redirect('menu')
 
         # Set a session value:
         #         request.session["user"] = user.username
@@ -67,8 +73,8 @@ def not_found(request, user, template_name='main/not-found.html'):
     ctx = {'user': user}
     return render(request, template_name, ctx)
 
-
-# @login_required
+@csrf_protect
+@login_required
 def registro(request, id, template_name='main/registro.html'):
     """ Registro de usuarios """
     user = Usuario.objects.get(id = id)
@@ -131,25 +137,48 @@ def registro(request, id, template_name='main/registro.html'):
         return render(request, template_name, {'form': form, 'medico': medico, 'errors': errors})
 
 
-# @login_required
+@csrf_protect
+@login_required
+def re_login(request, template_name='main/re-login.html'):
+    """ Información registrada correctamente"""
+    return render(request, template_name)
+
+
+@csrf_protect
+def cerrar_sesion(request):
+    """Cerrar sesión (logout)"""
+    logout(request)
+    return redirect('login')
+
+
+############### FUNCIONALIDAD APP ######################
+@csrf_protect
+@login_required
 def menu(request, template_name='main/menu.html'):
     if request.method == 'POST':
-        deportista = Deportista.objects.filter(dni=request.POST.get('dni'))
-        form = DeportistaForm(instance=deportista)
-        print(deportista)
-
-        return render(request, template_name, {'form': form})
+        errors = []
+        dni = request.POST.get('dni')
+        if len(dni) < 8:
+            errors.append('Debe ingresar un DNI válido.')
+        else:
+            return redirect('mostrar-datos', dni)
+        return render(request, template_name, {'errors': errors})
     else:
-        form = DeportistaForm()
+        # form = DeportistaForm()
         return render(request, template_name)
-    
-
-# @login_required
-def ingresar_datos(request):
-    pass
 
 
-# @login_required
+def mostrar_datos(request, id, dni, template_name='main/mostrar-datos.html'):
+    # paginator = Paginator()
+    try:
+        deportista = Deportista.objects.get(dni=dni)
+        form = DeportistaForm(instance=deportista)
+    except Deportista.DoesNotExist:
+        form = DeportistaForm()
+
+    return render(request, template_name, {'form': form})
+
+
 def realizar_apto(request, template_name='main/realizar-apto.html'):
     form = UsuarioForm() # borrar cuando esté completo
     ctx = {'form': form}
@@ -157,18 +186,18 @@ def realizar_apto(request, template_name='main/realizar-apto.html'):
     # return render(request, template_name)
 
 
-def re_login(request, template_name='main/re-login.html'):
-    """ Información registrada correctamente"""
-    return render(request, template_name)
 
 
 ############### INSTITUCIONES ######################
+@csrf_protect
+@login_required
 def listar_instituciones(request, template_name='main/list-instituciones.html'):
     """ Listar Instituciones"""
     instituciones = Institucion.objects.all()
     return render(request, template_name, {'instituciones': instituciones})
 
-
+@csrf_protect
+@login_required
 def agregar_institucion(request, template_name='main/add-institucion.html'):
     """ Agregar Institucion"""
     if request.method == 'POST':
@@ -180,7 +209,8 @@ def agregar_institucion(request, template_name='main/add-institucion.html'):
         form = InstitucionForm()
     return render(request, template_name, {'form': form})
 
-
+@csrf_protect
+@login_required
 def editar_institucion(request, id, template_name='main/add-institucion.html'):
     """ Editar Institucion"""
     form = InstitucionForm()
@@ -200,12 +230,15 @@ def editar_institucion(request, id, template_name='main/add-institucion.html'):
 
 
 ############### DEPORTES ######################
+@csrf_protect
+@login_required
 def listar_deportes(request, template_name='main/list-deportes.html'):
     """ Lista de Deportes"""
     deportes = Deporte.objects.all()
     return render(request, template_name, {'deportes': deportes})
 
-
+@csrf_protect
+@login_required
 def agregar_deporte(request, template_name='main/add-deporte.html'):
     """ Agregar Deporte"""
     if request.method == 'POST':
@@ -217,7 +250,8 @@ def agregar_deporte(request, template_name='main/add-deporte.html'):
         form = DeporteForm()
     return render(request, template_name, {'form': form})
 
-
+@csrf_protect
+@login_required
 def editar_deporte(request, id, template_name='main/add-deporte.html'):
     """ Editar Deporte"""
     form = DeporteForm()
@@ -234,82 +268,3 @@ def editar_deporte(request, id, template_name='main/add-deporte.html'):
     except ObjectDoesNotExist as e: 
         error = 'No se encontró el deporte deseado'
     return render(request, template_name, {'form': form, 'error': error})
-
-
-
-
-# -------------------------------------------------------------------------------#
-
-
-# def scan_aptos(request, template_name='main/scan-aptos.html'):
-#     return render(request, template_name)
-
-
-# def aptos_fisicos(request, template_name='main/aptos-fisicos.html'):
-#     if request.method == 'POST':
-#         form = AptoForm(request.POST)
-#         if form.is_valid():
-#             conn = sqlite3.connect('contabilidad.sqlite') # conexion a la db
-#             cursor = conn.cursor() # crea un cursor para recorrer la db
-#             cursor.execute('INSERT INTO personas VALUES (?, ?)',
-#                         (form.cleaned_data['nombre'], form.cleaned_data['edad'])) # ejecutamos codigo sql
-#             conn.commit()
-#             conn.close()
-#             # return HttpResponse('Cliente cargado correctamente')
-#             return redirect('clientes') 
-#     else:
-#         form = AptoForm()
-    
-#     data = {'form': form}                                  
-#     return render(request, template_name, data)
-
-
-# def primer_apto(request, template_name='main/primer-apto.html'):
-#     return render(request, template_name)
-
-
-# def nuevo_apto(request, template_name='main/nuevo-apto.html'):
-#     return render(request, template_name)
-
-
-#######################################################################
-
-
-# def certificado(request):
-#     """Concultar una API"""
-#     r = requests.get("https://rickandmortyapi.com/api/character/520")
-#     if r.status_code == 200:
-#         contenido = r.json()
-#         html = f"""
-#                         <html>
-#                         <title>Personajes THE RICK AND MORTY</title>
-#                         <p><strong>Nombre del Personaje: </strong>{contenido['name']}</p>    
-#                         <p><strong>Especie del Personaje: </strong>{contenido['species']}</p>
-#                         </html>
-#                 """ 
-#     else:
-#         html = "Error, no se pudo obtener la información"
-
-#     return HttpResponse(html)
-
-
-# def clientes(request, template_name='main/clientes.html'):
-#     conn = sqlite3.connect('contabilidad.sqlite') # conecta a la base de datos
-#     cliente = conn.cursor() # crea un cursor para recorrer la base de datos
-#     cliente.execute('select nombre, edad from personas') # a traves del cursor ejecutamos codigo sql
-#     cliente_list = cliente.fetchall()
-#     conn.close()
-#     dato = {'clientes': cliente_list}
-#     return render(request, template_name, dato)
-
-
-# def cliente(request, nombre_cliente, template_name='main/cliente.html'):
-#     conn = sqlite3.connect('contabilidad.sqlite') # conecta a la base de datos
-#     cursor = conn.cursor() # crea un cursor para recorrer la base de datos
-#     cursor.execute('SELECT nombre, edad FROM personas WHERE nombre=?', [nombre_cliente]) # a traves del cursor ejecutamos codigo sql
-#     cliente = cursor.fetchone()
-#     # capturamos el error si no hay resultados
-#     if cliente is None:
-#         raise Http404
-#     dato = {'cliente': cliente}
-#     return render(request, template_name, dato)

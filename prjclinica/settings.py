@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -70,6 +71,8 @@ TEMPLATES = [
     },
 ]
 
+LOGIN_URL = '/clinica/login/'
+
 WSGI_APPLICATION = 'prjclinica.wsgi.application'
 
 
@@ -117,7 +120,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
@@ -135,3 +137,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    # Otros backends si los tienes
+]

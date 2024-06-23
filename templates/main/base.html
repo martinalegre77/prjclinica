@@ -31,9 +31,17 @@
     </nav>
 
     <nav class="navbar segundo">
-        <span class="fecha"></span>
-    </nav>
 
+    {% if user.is_authenticated %}
+        <span class='container logout'>
+            Usuario: {{ user.username }} &nbsp;&nbsp;<a href={% url 'cerrar-sesion' %}>Cerrar sesión</a>
+        </span>
+    {% else %}
+        <span class="fecha"></span>
+    {% endif %}
+
+    </nav>
+    
     <div>
     {% block bloque_principal %}
     

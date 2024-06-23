@@ -244,11 +244,12 @@ input {
     display: block;
     margin: 35px auto;
     width: 30%;
-    padding: 10px;
+    padding: 8px;
     font-size: 20px;
     color: #edf2f8;
     background: #092954;
-    border: 3px solid #3b3b4f;  
+    border: 3px solid #3b3b4f;
+    margin-bottom: 20px;  
 
 }
 
@@ -267,8 +268,9 @@ input {
     width: 30%;
     height: 3rem;
     margin: 3rem;
-    margin-bottom: .5rem;
-    padding: .3rem;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    padding: 8px;
     font-size: 20px;
     color: #edf2f8;
     background: #092954;
@@ -357,4 +359,22 @@ input {
     /*display: flex;
     /*justify-content: center; /* Centra horizontalmente */
     /*align-items: center; /* Centra verticalmente */
+}
+
+
+/* LOGOUT */
+.logout {
+    padding-top: 0;
+    margin-left: 85%;
+    color: #e1dcd9;
+    font-size: 14px;
+    font-family: Roboto, Verdana, Geneva, Tahoma, sans-serif;
+    letter-spacing: 0.1em;
+}
+
+.logout a {
+    color: #e1dcd9;
+    margin: auto;
+    padding-left: 0;
+    margin-left: 0;
 }
