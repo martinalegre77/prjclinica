@@ -1,0 +1,236 @@
+{% extends 'main/base.html' %} 
+
+{% load static %}
+
+{% block bloque_principal %}
+
+    <a href={% url 'menu' %} class="btn btn-primary boton-flotante">Volver</a>
+
+    <p class="tit-page">{% block titulo_principal %}
+        {% if deportista %}
+            Resultado para el DNI {{ dni }}
+        {% else %}
+            No hay resultados para el DNI {{ dni }}
+        {% endif %}  
+    {% endblock %}</p>  
+
+    {% if deportista %}
+
+    <div class='body_form'>
+
+        <form class='form_eval' action="/submit-evaluacion/" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <!-- ANTECEDENTES FAMILIARES PATOLÓGICOS -->
+    <fieldset>
+        <legend>Antecedentes Familiares Patológicos</legend>
+        <legend>Enfermedades:</legend>
+
+        <div>
+            <label for="fam_cardiovasculares">Cardiovasculares</label>
+            <input type="radio" id="fam_cardiovasculares" name="fam_cardiovasculares" value="true"> Sí
+            <input type="radio" id="fam_cardiovasculares" name="fam_cardiovasculares" value="false" checked> No
+            <label class='cual' for="fam_cardiovasculares_cual">&nbsp; &#45; &nbsp; Cual?</label>
+            <input type="text" id="fam_cardiovasculares_cual" name="fam_cardiovasculares_cual">
+        </div>
+
+        <div>
+            <label for="fam_neurologicas">Neurológicas</label>
+            <input type="radio" id="fam_neurologicas" name="fam_neurologicas" value="true"> Sí
+            <input type="radio" id="fam_neurologicas" name="fam_neurologicas" value="false" checked> No
+            <label class='cual' for="fam_neurologicas_cual">&nbsp; &#45; &nbsp; Cual?</label>
+            <input type="text" id="fam_neurologicas_cual" name="fam_neurologicas_cual">
+        </div>
+
+        <div>
+            <label for="fam_tumorales">Tumorales</label>
+            <input type="radio" id="fam_tumorales" name="fam_tumorales" value="true"> Sí
+            <input type="radio" id="fam_tumorales" name="fam_tumorales" value="false" checked> No
+            <label class='cual' for="fam_tumorales_cual">&nbsp; &#45; &nbsp; Cual?</label>
+            <input type="text" id="fam_tumorales_cual" name="fam_tumorales_cual">
+        </div>
+
+        <div>
+            <label for="fam_respiratorias">Respiratorias</label>
+            <input type="radio" id="fam_respiratorias" name="fam_respiratorias" value="true"> Sí
+            <input type="radio" id="fam_respiratorias" name="fam_respiratorias" value="false" checked> No
+            <label class='cual' for="fam_respiratorias_cual">&nbsp; &#45; &nbsp; Cual?</label>
+            <input type="text" id="fam_respiratorias_cual" name="fam_respiratorias_cual">
+        </div>
+
+        <div>
+            <label for="fam_desangre">De sangre</label>
+            <input type="radio" id="fam_desangre" name="fam_desangre" value="true"> Sí
+            <input type="radio" id="fam_desangre" name="fam_desangre" value="false" checked> No
+            <label class='cual' for="fam_desangre_cual">&nbsp; &#45; &nbsp; Cual?</label>
+            <input type="text" id="fam_desangre_cual" name="fam_desangre_cual">
+        </div>
+
+        <div>
+            <label for="fam_otras">Otras</label>
+            <input type="radio" id="fam_otras" name="fam_otras" value="true"> Sí
+            <input type="radio" id="fam_otras" name="fam_otras" value="false" checked> No
+            <label class='cual' for="fam_otras_cual">&nbsp; &#45; &nbsp; Cual?</label>
+            <input type="text" id="fam_otras_cual" name="fam_otras_cual">
+        </div>
+
+        <div>
+            <label for="fam_obs">Observaciones &nbsp; &nbsp; </label>
+            <textarea id="fam_obs" name="fam_obs"></textarea>
+        </div>
+    </fieldset>
+
+    <!-- ANTECEDENTES PERSONALES PATOLÓGICOS -->
+    <fieldset>
+        <legend>Antecedentes Personales Patológicos</legend>
+        <legend>Enfermedades:</legend>
+
+        <div>
+            <label for="per_cardiologica">Cardiológica</label>
+            <input type="radio" id="per_cardiologica" name="per_cardiologica" value="true"> Sí
+            <input type="radio" id="per_cardiologica" name="per_cardiologica" value="false" checked> No
+            <label class='cual' for="per_cardiologica_cual"> &#45; Cual?</label>
+            <input type="text" id="per_cardiologica_cual" name="per_cardiologica_cual">
+        </div>
+
+        <div>
+            <label for="per_respiratoria">Respiratoria</label>
+            <input type="radio" id="per_respiratoria" name="per_respiratoria" value="true"> Sí
+            <input type="radio" id="per_respiratoria" name="per_respiratoria" value="false" checked> No
+            <label class='cual' for="per_respiratoria_cual"> &#45; Cual?</label>
+            <input type="text" id="per_respiratoria_cual" name="per_respiratoria_cual">
+        </div>
+
+        <div>
+            <label for="per_neurologicas">Neurológicas</label>
+            <input type="radio" id="per_neurologicas" name="per_neurologicas" value="true"> Sí
+            <input type="radio" id="per_neurologicas" name="per_neurologicas" value="false" checked> No
+            <label class='cual' for="per_neurologicas_cual"> &#45; Cual?</label>
+            <input type="text" id="per_neurologicas_cual" name="per_neurologicas_cual">
+        </div>
+
+        <div>
+            <label for="per_infecciosas">Infecciosas</label>
+            <input type="radio" id="per_infecciosas" name="per_infecciosas" value="true"> Sí
+            <input type="radio" id="per_infecciosas" name="per_infecciosas" value="false" checked> No
+            <label class='cual' for="per_infecciosas_cual"> &#45; Cual?</label>
+            <input type="text" id="per_infecciosas_cual" name="per_infecciosas_cual">
+        </div>
+
+        <div>
+            <label for="per_cirugias">Cirugías</label>
+            <input type="radio" id="per_cirugias" name="per_cirugias" value="true"> Sí
+            <input type="radio" id="per_cirugias" name="per_cirugias" value="false" checked> No
+            <label class='cual' for="per_cirugias_cual">&nbsp; &#45; &nbsp; Cual?</label>
+            <input type="text" id="per_cirugias_cual" name="per_cirugias_cual">
+        </div>
+
+        <div>
+            <label for="per_alergias">Alergias</label>
+            <input type="radio" id="per_alergias" name="per_alergias" value="true"> Sí
+            <input type="radio" id="per_alergias" name="per_alergias" value="false" checked> No
+            <label class='cual' for="per_alergias_cual">&nbsp; &#45; &nbsp; Cual?</label>
+            <input type="text" id="per_alergias_cual" name="per_alergias_cual">
+        </div>
+
+        <div>
+            <label for="per_traumatologicas">Traumatológicas</label>
+            <input type="radio" id="per_traumatologicas" name="per_traumatologicas" value="true"> Sí
+            <input type="radio" id="per_traumatologicas" name="per_traumatologicas" value="false" checked> No
+            <label class='cual' for="per_traumatologicas_cual">&nbsp; &#45; &nbsp; Cual?</label>
+            <input type="text" id="per_traumatologicas_cual" name="per_traumatologicas_cual">
+        </div>
+
+        <div>
+            <label for="per_otras">Otras</label>
+            <input type="radio" id="per_otras" name="per_otras" value="true"> Sí
+            <input type="radio" id="per_otras" name="per_otras" value="false" checked> No
+            <label class='cual' for="per_otras_cual">&nbsp; &#45; &nbsp; Cual?</label>
+            <input type="text" id="per_otras_cual" name="per_otras_cual">
+        </div>
+    </fieldset>
+
+    <!-- EXAMEN FÍSICO -->
+    <fieldset>
+        <legend>Examen Físico</legend>
+
+        <div>
+            <label for="estado_general">Estado General &nbsp; &nbsp; </label>
+            <input type="text" id="estado_general" name="estado_general">
+        </div>
+
+        <div>
+            <label for="talla">Talla &nbsp; &nbsp; </label>
+            <input type="number" id="talla" name="talla" step="0.01">
+        </div>
+
+        <div>
+            <label for="peso">Peso &nbsp; &nbsp; </label>
+            <input type="number" id="peso" name="peso" step="0.001">
+        </div>
+
+        <div>
+            <label for="presion_arterial">Presion Arterial  &nbsp; &nbsp; </label>
+            <input type="text" id="presion_arterial" name="presion_arterial">
+        </div>
+
+        <div>
+            <label for="frecuencia_cardiaca">Frecuencia Cardíaca  &nbsp; &nbsp; </label>
+            <input type="text" id="frecuencia_cardiaca" name="frecuencia_cardiaca">
+        </div>
+
+        <div>
+            <label for="oxigeno_sangre">Oxígeno en Sangre  &nbsp; &nbsp; </label>
+            <input type="number" id="oxigeno_sangre" name="oxigeno_sangre">
+        </div>
+    </fieldset>
+
+    <!-- CERTIFICADO DE APTO FISICO -->
+    <fieldset>
+        <legend>Certificado de Apto Físico</legend>
+
+        <div>
+            <label for="fecha">Fecha &nbsp; &nbsp; </label>
+            <input type="datetime-local" id="fecha" name="fecha">
+        </div>
+
+        <div>
+            <label for="tipo">Tipo de Apto &nbsp; &nbsp; </label>
+            <input type="text" id="tipo" name="tipo">
+        </div>
+
+        <div>
+            <label for="observaciones">Observaciones &nbsp; &nbsp; </label>
+            <input type="text" id="observaciones" name="observaciones">
+        </div>
+    </fieldset>
+
+            <button type="submit">Guardar</button>
+        </form>
+
+    </div>
+
+    {% else %}
+            <div class='separador-m-datos'></div>
+            <div class='container btn btn-new'>
+            <a href={% url 'alta-deportista' %} id='reg-new'>Registrarlo</a>
+            </div>
+            <div class='separador-m-datos'></div>
+    {% endif %}
+
+    <div class='separador3'></div>
+
+    {% comment %} <main id='register'>
+        <form>
+
+        {% csrf_token %}
+            <section id='seccion' role="region" aria-labelledby="user-info">
+
+            {{ form.as_p }}
+
+            </section>
+
+        </form>
+    </main> {% endcomment %}
+
+{% endblock %}
+

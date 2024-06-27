@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 # from django.http import Http404, HttpResponse
 # import requests, sqlite3
-from .forms import DeporteForm, DeportistaForm, InstitucionForm, UsuarioForm
+from .forms import DeporteForm, DeportistaForm, InstitucionForm, UsuarioForm, EvaluacionForm
 from .models import *
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required # para autenticacion
@@ -161,32 +161,66 @@ def menu(request, template_name='main/menu.html'):
         if len(dni) < 8:
             errors.append('Debe ingresar un DNI válido.')
         else:
-            return redirect('mostrar-datos', dni)
+            return redirect('mostrar', dni)
         return render(request, template_name, {'errors': errors})
     else:
         # form = DeportistaForm()
         return render(request, template_name)
 
 
-def mostrar_datos(request, id, dni, template_name='main/mostrar-datos.html'):
+@csrf_protect
+@login_required
+def mostrar(request, dni, template_name='main/mostrar.html'):
     # paginator = Paginator()
     try:
         deportista = Deportista.objects.get(dni=dni)
         form = DeportistaForm(instance=deportista)
     except Deportista.DoesNotExist:
+        deportista = None
         form = DeportistaForm()
+    try:
+        evaluaciones = Evaluacion.objects.filter(deportista=deportista)
+    except Deportista.DoesNotExist:
+        evaluaciones = None
 
+    return render(request, template_name, {'form': form, 'dni': dni, 'deportista': deportista, 'evaluaciones': evaluaciones})
+
+
+############### DEPORTISTA ######################
+@csrf_protect
+@login_required
+def add_deportista(request, template_name='main/add-deportista.html'):
+    """ Agregar Deportista"""
+    if request.method == 'POST':
+        form = DeportistaForm(request.POST)
+        if form.is_valid():
+            dni = request.POST.get('dni')
+            form.save()
+        return redirect('mostrar', dni)
+    else:
+        form = DeportistaForm()
     return render(request, template_name, {'form': form})
 
 
-def realizar_apto(request, template_name='main/realizar-apto.html'):
-    form = UsuarioForm() # borrar cuando esté completo
-    ctx = {'form': form}
-    return render(request, template_name, ctx)
-    # return render(request, template_name)
-
-
-
+@csrf_protect
+@login_required
+def editar_deportista(request, id, template_name='main/add-deportista.html'):
+    """ Editar Deportista"""
+    form = DeportistaForm()
+    error = None
+    try:
+        deportista = Deportista.objects.get(id=id)
+        if request.method == 'GET':
+            form = DeportistaForm(instance=deportista)
+        else:
+            form = DeportistaForm(request.POST, instance=deportista)
+            if form.is_valid():
+                dni = request.POST.get('dni')
+                form.save()
+            return redirect('mostrar', dni)
+    except ObjectDoesNotExist as e: 
+        error = 'No se encontraron datos del deportista'
+    return render(request, template_name, {'form': form, 'error': error})
 
 ############### INSTITUCIONES ######################
 @csrf_protect

@@ -1,16 +1,6 @@
-# from django import forms
-# from django.contrib.auth.forms import AuthenticationForm
 from django.forms import ModelForm
-from .models import AntFamiliares, AntPersonales, Apto, Deporte, Deportista, ExamenFisico, Institucion, Usuario
+from .models import Deporte, Deportista, Evaluacion, Institucion, Usuario
 
-
-# class FormularioLogin(AuthenticationForm):
-#     def __init__(self, *args, **kwargs):
-#         super(FormularioLogin, self).__init__(*args, **kwargs)
-#         self.fields['username'].widget.attrs['class'] = 'form-control'
-#         self.fields['username'].widget.attrs['placeholder'] = 'Nombre de usuario'
-#         self.fields['password'].widget.attrs['class'] = 'form-control'
-#         self.fields['password'].widget.attrs['placeholder'] = 'Contraseña'
 
 class UsuarioForm(ModelForm):
     class Meta:
@@ -40,25 +30,7 @@ class DeportistaForm(ModelForm):
         fields = '__all__'
 
 
-class AntFamiliaresForm(ModelForm):
+class EvaluacionForm(ModelForm):
     class Meta:
-        model = AntFamiliares
-        fields = '__all__'
-
-
-class AntPersonalesForm(ModelForm):
-    class Meta:
-        model = AntPersonales
-        fields = '__all__'
-
-
-class ExamenFisicoForm(ModelForm):
-    class Meta:
-        model = ExamenFisico
-        fields = '__all__'
-
-
-class AptoForm(ModelForm):
-    class Meta:
-        model = Apto
+        model = Evaluacion
         fields = '__all__'

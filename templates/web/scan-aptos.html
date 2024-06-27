@@ -5,16 +5,40 @@
 
 {% block bloque_principal %}
 
-    {% comment %} <a href="https://tupagina.com" class="boton-flotante">Aptos Físicos</a> {% endcomment %}
+    <a href={% url 'index' %} class="boton-flotante">Volver</a>
         
     <p class="tit-page">{% block titulo_principal %}Aptos Físicos{% endblock %}</p>
 
     <p class='titulo-scan'>Escaner de Certificados de Aptos Físicos</p>
 
-    <img src="{% static 'img/web-qr.jpg' %}" class="img-fluid img-thumbnail mx-auto d-block" alt="scan-qr">
+    <div class='separador-footer'></div>
+
+    <div id="reader"></div>
+    <div id="result"></div>
+
+    <div class='separador-footer'></div>
 
     <samp>Acerque el certificado a la cámara de manera que se vea completo el <kbd>código QR</kbd>.</samp>
 
+    <div class='separador-final'></div>
 
+    <!-- Biblioteca html5-qrcode -->
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script>
+        console.log('html5-qrcode library loaded:', typeof Html5QrcodeScanner !== 'undefined');
+    </script>
+    <!-- Archivo JavaScript -->
+    <script src="{% static 'js/scan.js' %}"></script>
+
+{% endblock %}
+
+{% block footer %}
+    <footer id="footer">
+        <div class='separador-footer'></div>
+        <p class="copy1">&copy; Desarrollado por <strong><em>@legre</em></strong></p>
+        <p class="copy1">Municipalidad de Concordia - 2024 </p>
+        <p class="copy1">Mitre 76, Concordia, Entre Ríos</p>
+        <div class='separador-footer'></div>
+    </footer>
 {% endblock %}
 

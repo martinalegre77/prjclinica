@@ -142,6 +142,11 @@ footer a{
     margin: 2px;
 }
 
+.copy1 {
+    margin: .2rem;
+    padding: .1rem;
+}
+
 /* BLOQUE PRINCIPAL */
 
 .resenia {
@@ -156,7 +161,6 @@ footer a{
 
 
 /* BOTON APTOS */
-
 .boton-flotante {
     position: fixed;
     top: 35px; /* Ajusta la distancia desde la parte superior */
@@ -175,10 +179,35 @@ footer a{
 }
 
 
+/* SCAN QR */
+#reader {
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+}
+#result {
+    text-align: center;
+    margin-top: 20px;
+}
 
+samp {
+    display: block;
+    margin: 2rem auto;
+    text-align: center;
+    color: red;
+}
 
+.separador-final {
+    display: block;
+    height: 90px;
+    width: 100%;
+}
 
-
+.separador-footer {
+    display: block;
+    height: 30px;
+    width: 100%;
+}
 
 
 /* FONTS PARA USAR */

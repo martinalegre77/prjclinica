@@ -11,7 +11,6 @@
 
     <main id='register'>
         <form method="post" enctype="multipart/form-data" id="registrationForm">
-        {% comment %} <form method="post"> {% endcomment %}
         {% csrf_token %}
 
             <section id='seccion' role="region" aria-labelledby="user-info">
@@ -28,10 +27,6 @@
                         <label for="apellido">Apellido:</label>
                         <p>{{ form.apellido }}</p>
                     </div>
-                    {% comment %} <div class="info">
-                        <label for="password">Contraseña Actual:</label>
-                        <p>{{ form.password }}</p>
-                    </div>   {% endcomment %}
                     <div class="info">
                         <label for="newpass">Nueva Contraseña:</label>
                         <p><input type="password" name="newpass" id="newpass"/></p>
@@ -41,10 +36,6 @@
                 </section>
                 <section id='seccion' role="region" aria-labelledby="prof-info">
                     <h2 id="prof-info">Datos para Profesionales</h2> 
-                        {% comment %} <div class="info">
-                            <label for="dni">DNI:</label>
-                            <p>{{ form.dni }}</p>
-                        </div>  {% endcomment %}
                         <div class="info">
                             <label for="tipo">Tipo Matrícula:</label>
                             <p>{{ form.tipo_matricula }}</p>

@@ -68,7 +68,7 @@ class Usuario(AbstractBaseUser):
         verbose_name_plural = 'Usuarios'
 
     def __str__(self):
-        return f'Usuario: {self.username}'
+        return f'{self.username}'
     
     def has_perm(self, perm, obj = None):
         return True
@@ -142,10 +142,13 @@ class Deportista(models.Model):
         return f'Deportista: {self.apellido}, {self.nombres}'
 
 
-class AntFamiliares(models.Model):
+class Evaluacion(models.Model):
     """
-    ANTECEDENTES FAMILIARES PATOLÓGICOS
+    EVALUACIÓN MÉDICA
     """
+    # DEPORTISTA
+    deportista = models.ForeignKey(Deportista, on_delete=models.PROTECT)
+    # ANTECEDENTES FAMILIARES PATOLÓGICOS
     fam_cardiovasculares = models.BooleanField('Cardiovasculares', default=False)
     fam_cardiovasculares_cual = models.CharField('Cual?', max_length=30, null=True, blank=True)
     fam_neurologicas = models.BooleanField('Neurológicas', default=False)
@@ -159,18 +162,7 @@ class AntFamiliares(models.Model):
     fam_otras = models.BooleanField('Otras', default=False, null=True, blank=True)
     fam_otras_cual = models.CharField('Cual?', max_length=30, null=True, blank=True)
     fam_obs = models.TextField(null=True, blank=True)
-
-    class Meta:
-        db_table = ''
-        managed = True
-        verbose_name = 'Antecedentes Familiares'
-        verbose_name_plural = 'Antecedentes Familiares'
-
-
-class AntPersonales(models.Model):
-    """
-    ANTECEDENTES PERSONALES PATOLÓGICOS
-    """
+    # ANTECEDENTES PERSONALES PATOLÓGICOS
     per_cardiologica = models.BooleanField('Cardiológicas', default=False)
     per_cardiologica_cual = models.CharField('Cual?', max_length=30, null=True, blank=True)
     per_respiratoria = models.BooleanField('Respiratorias', default=False)
@@ -194,49 +186,26 @@ class AntPersonales(models.Model):
     fuma = models.BooleanField('Fuma?', default=False)
     alcohol = models.BooleanField('Toma alcohol?', default=False)
     sustancias = models.BooleanField('Abuso de sustancias?', default=False)
-
-    class Meta:
-        db_table = ''
-        managed = True
-        verbose_name = 'Antecedentes Personales'
-        verbose_name_plural = 'Antecedentes Personales'
-
-
-class ExamenFisico(models.Model):
-    """
-    EXAMEN FÍSICO
-    """
-    # id_examen / se crea automaticamente
+    # EXAMEN FÍSICO
     estado_general = models.CharField('Estado general', max_length=40)
     talla = models.DecimalField('Talla (mts)', decimal_places=2, max_digits=3)
     peso = models.DecimalField('Peso (kg)', decimal_places=3, max_digits=6)
     presion_arterial = models.CharField('TA', max_length=10)
     frecuencia_cardiaca = models.CharField('FC', max_length=10)
     oxigeno_sangre = models.IntegerField('SO2')
-
-    class Meta:
-        db_table = ''
-        managed = True
-        verbose_name = 'Examen'
-        verbose_name_plural = 'Exámenes'
-
-
-class Apto(models.Model):
-    """
-    CERTIFICADO DE APTO FISICO
-    """
-    id_deportista = models.ForeignKey(Deportista, on_delete=models.PROTECT)
-    id_usuario = models.ForeignKey(Usuario, on_delete=models.PROTECT)
-    fecha = models.DateField(auto_now=True, auto_now_add=False)
-    id_familiares = models.ForeignKey(AntFamiliares, on_delete=models.PROTECT)
-    id_personales = models.ForeignKey(AntPersonales, on_delete=models.PROTECT)
-    id_examen = models.ForeignKey(ExamenFisico, on_delete=models.PROTECT)
+    # CERTIFICADO DE APTO FISICO
+    medico = models.ForeignKey(Usuario, on_delete=models.PROTECT)
+    fecha = models.DateTimeField(auto_now=True, auto_now_add=False)
     tipo = models.CharField('Tipo de Apto', max_length=2, choices=TIPO_APTO_CHOISE)
     observaciones = models.CharField('Observaciones', max_length=80, null=True, blank=True)
-#     apto_pdf = models.ImageField()
+    evaluacion_file = models.ImageField(upload_to='evaluaciones/', null=True, blank=True)
+    certificado_file = models.ImageField(upload_to='certificados/', null=True, blank=True)
 
     class Meta:
         db_table = ''
         managed = True
-        verbose_name = 'Apto'
-        verbose_name_plural = 'Aptos'
+        verbose_name = 'Evaluación'
+        verbose_name_plural = 'Evaluaciones'
+
+    def __str__(self):
+        return f'{self.deportista}. Fecha: {self.fecha}. Médico interviniente: {self.medico}. Nro certificado: {self.pk}.'
