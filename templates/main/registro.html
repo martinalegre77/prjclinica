@@ -56,16 +56,23 @@
                             <label for="mail">Email:</label>
                             <p>{{ form.mail }}</p>
                         </div>
-                        <div class="info">
-                            <label for="foto">Foto:</label>
-                            <a href="#" class='habilitarCam' id='habilitar'>Encender Cámara</a>
-                        </div>
-                        <div class='videoElement'>
-                            <video id='videoElement' autoplay='true'></video>
-                            <a href="#" class='capturarCam' id='capturar'>Tomar Foto</a>
-                        </div>
-                        <div class='canvasElement'>
-                            <canvas id='canvasElement' height='200' width='200'></canvas>
+
+                        <div class='container text-center'>
+                            <h2 id="user-info">Debe tomarse una foto para su perfil</h2>
+                            <div class="videoWrapper">
+                                <div class="info">
+                                    <a href="#" class='btn btn-primary btn-lg habilitarCam' id='habilitar'>Cámara</a>
+                                </div>
+                                <div class='videoElement'>
+                                    <video id='videoElement' autoplay='true'></video>
+                                </div>
+                                <div class="capturarInfo">
+                                    <a href="#" class='btn btn-primary btn-lg capturarCam' id='capturar' style="display: none;">Tomar Foto</a>
+                                </div>
+                            </div>
+                            <div class='canvasElement'>
+                                <canvas id='canvasElement' height='200' width='200'></canvas>
+                            </div>
                         </div>
 
                     <script src='{% static "js/camara.js" %}'></script>

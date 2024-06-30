@@ -1,0 +1,16 @@
+{% extends 'main/base.html' %} 
+
+{% load static %}
+
+{% block bloque_principal %}
+
+    <a href={% url 'menu' %} class="btn btn-primary boton-flotante">Inicio</a>
+        
+    <p class="tit-page">{% block titulo_principal %}El certificado se confeccionó correctamente{% endblock %}</p>
+
+    
+    <img src='{% static "img/success.png" %}' class="rounded mx-auto d-block not_found" alt="user_not_found">
+
+    <samp>Pulse <kbd>INICIO</kbd> para realizar una nueva evaluación.</samp>
+
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+{% block bloque_principal %}
+
+<p>Error en el reconocimiento facial para el usuario con ID {{ user_id }}.</p>
+<a href="{% url 'evaluacion' user_id %}" class="btn btn-primary">Reintentar</a>
+
+{% endblock %}

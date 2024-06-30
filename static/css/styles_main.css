@@ -167,13 +167,37 @@ samp {
 
 .separador5 {
     display: block;
-    height: 40px;
+    height: 28px;
     width: 100%;
 }
 
 .separador6 {
     display: block;
     height: 380px;
+    width: 100%;
+}
+
+.separador7 {
+    display: block;
+    height: 142px;
+    width: 100%;
+}
+
+.separador8 {
+    display: block;
+    height: 60px;
+    width: 100%;
+}
+
+.separador9 {
+    display: block;
+    height: 72px;
+    width: 100%;
+}
+
+.separador10 {
+    display: block;
+    height: 76px;
     width: 100%;
 }
 
@@ -185,13 +209,12 @@ samp {
 
 .separador-deportista {
     display: block;
-    height: 210px;
+    height: 205px;
     width: 100%;
 }
 
 
 /* FOOTER */
-
 #footer{
     color: #edf2f8;
     position: relative;
@@ -337,53 +360,32 @@ input {
     width: 100%;
 }
 
-
-/* CAMARA */
-
-.habilitarCam, .capturarCam {
-    width: 150px; /* Ancho */
-    height: 30px; /* Alto */
-    line-height: 40px; /* Alinea el texto verticalmente */
-    text-align: center; /* Alinea el texto horizontalmente */
-    background-color: #32435f; /* Color de fondo */
-    color: #edf2f8; /* Color del texto */
-    font-size: 14px; /* Tamaño del texto */
-    text-decoration: none; /* Sin subrayado */
-    border-radius: 3px; /* Bordes redondeados */
-    cursor: pointer; /* Cambia el cursor al pasar por encima */
-    padding: 6px 24px;
-}
-
+/*
 .capturarCam {
     display:none;
     position: absolute;
-    bottom: -25px; /* Posición del botón abajo del contenedor */
-    left: 50%; /* Posiciona el botón horizontalmente en el centro del contenedor */
-    transform: translateX(-50%); /* Centra el botón horizontalmente */
-    line-height: 20px; /* Alinea el texto verticalmente */
+    bottom: -25px; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    line-height: 20px; 
 }
+
 
 .videoElement {
     position: fixed;
-    top: 65%; /* Ajusta la distancia desde la parte superior */
-    right: 25%; /* Ajusta la distancia desde la derecha */
+    top: 65%; 
+    right: 25%; 
     border-radius: 5px; 
-    z-index: 500; /* Asegura que esté por encima de otros elementos */
-    /*display: flex;
-    /*justify-content: center; /* Centra horizontalmente */
-    /*align-items: center; /* Centra verticalmente */
+    z-index: 500; 
 }
 
 .canvasElement {
     position: fixed;
-    top: 65%; /* Ajusta la distancia desde la parte superior */
-    right: 25%; /* Ajusta la distancia desde la derecha */
+    top: 65%; 
+    right: 25%; 
     border-radius: 5px; 
-    z-index: 999; /* Asegura que esté por encima de otros elementos */
-    /*display: flex;
-    /*justify-content: center; /* Centra horizontalmente */
-    /*align-items: center; /* Centra verticalmente */
-}
+    z-index: 999; 
+}*/
 
 
 /* LOGOUT */
@@ -547,4 +549,42 @@ textarea {
 
 #tit-img {
     text-align: center;
+}
+
+/* RECONOCIMIENTO */
+.stylecam {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px; 
+}
+
+/* Estilo para el contenedor de la cámara y la captura */
+.videoWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px; /* Espacio entre el contenedor de la cámara y el siguiente */
+}
+
+/* Estilo para el video */
+.videoElement {
+    width: 100%; /* Ancho del video al 100% del contenedor */
+    max-width: 400px; /* Ancho máximo del video */
+    margin-bottom: 10px; /* Espacio entre el video y el botón 'Tomar Foto' */
+}
+
+.habilitarCam, .capturarCam {
+    width: 150px; /* Ancho */
+    height: 50px; /* Alto */
+    line-height: 40px; /* Alinea el texto verticalmente */
+    text-align: center; /* Alinea el texto horizontalmente */
+    color: #edf2f8; /* Color del texto */
+    font-size: 14px; /* Tamaño del texto */
+    text-decoration: none; /* Sin subrayado */
+    border-radius: 3px; /* Bordes redondeados */
+    cursor: pointer; /* Cambia el cursor al pasar por encima */
+    padding: 6px 24px;
 }

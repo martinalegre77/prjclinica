@@ -80,8 +80,21 @@
                         <img src="{{ evaluacion.certificado_file.url }}" alt="Certificado de Apto Físico" id='img-cert'>
                     {% endif %}
                 {% endfor %}
+                {% if user.medico %}
+                    <div class='container btn btn-new'>
+                        <a href={% url 'evaluacion' deportista.id %} id='reg-new'>Evaluar</a>
+                    </div>
+                {% endif %}
             {% else %}
+                <div class='separador5'></div>
                 <p class="tit-page">No se encontraron evaluaciones para este deportista.</p>
+                <div class='separador9'></div>
+                {% if user.medico %}
+                    <div class='container btn btn-new'>
+                        <a href={% url 'evaluacion' deportista.id %} id='reg-new'>Evaluar</a>
+                    </div>
+                {% endif %}
+                <div class='separador7'></div>
             {% endif %}
 
     </div>
@@ -89,7 +102,7 @@
     {% else %}
             <div class='separador-m-datos'></div>
             <div class='container btn btn-new'>
-            <a href={{ deportista.evaluacion_file }} id='reg-new'>Registrarlo</a>
+            <a href={% url 'add-deportista' %} id='reg-new'>Registrarlo</a>
             </div>
             <div class='separador-m-datos'></div>
     {% endif %}

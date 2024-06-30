@@ -4,21 +4,26 @@
 
 {% block bloque_principal %}
 
-    <a href={% url 'menu' %} class="btn btn-primary boton-flotante">Volver</a>
+    <a href={% url 'menu' %} class="btn btn-primary boton-flotante">Cancelar</a>
 
-    <p class="tit-page">{% block titulo_principal %}
-        {% if deportista %}
-            Resultado para el DNI {{ dni }}
+    <p class="tit-page">
+    {% block titulo_principal %}
+        {% if user.medico %}
+            <p class="tit-page">{{ deportista.apellido.upper }}, {{ deportista.nombres }}. DNI: {{ deportista.dni  }}</p>
         {% else %}
-            No hay resultados para el DNI {{ dni }}
+            <p class="tit-page">{{ user.username.upper }} no tiene acceso a ésta página</p>
+            <img src='{% static "img/user_invalid.png" %}' class="rounded mx-auto d-block not_found" alt="user_not_found">
         {% endif %}  
     {% endblock %}</p>  
 
-    {% if deportista %}
+    {% if user.medico %}
 
     <div class='body_form'>
 
-        <form class='form_eval' action="/submit-evaluacion/" method="post" enctype="multipart/form-data">
+        <form class='form_eval' id='form-eval' method="post" enctype="multipart/form-data">
+
+        {% comment %} action="{% url 'obtener-imagen' deportista.id %}" {% endcomment %}
+
             {% csrf_token %}
             <!-- ANTECEDENTES FAMILIARES PATOLÓGICOS -->
     <fieldset>
@@ -155,32 +160,32 @@
 
         <div>
             <label for="estado_general">Estado General &nbsp; &nbsp; </label>
-            <input type="text" id="estado_general" name="estado_general">
+            <input type="text" id="estado_general" name="estado_general" required>
         </div>
 
         <div>
             <label for="talla">Talla &nbsp; &nbsp; </label>
-            <input type="number" id="talla" name="talla" step="0.01">
+            <input type="number" id="talla" name="talla" step="0.01" required>
         </div>
 
         <div>
             <label for="peso">Peso &nbsp; &nbsp; </label>
-            <input type="number" id="peso" name="peso" step="0.001">
+            <input type="number" id="peso" name="peso" step="0.001" required>
         </div>
 
         <div>
             <label for="presion_arterial">Presion Arterial  &nbsp; &nbsp; </label>
-            <input type="text" id="presion_arterial" name="presion_arterial">
+            <input type="text" id="presion_arterial" name="presion_arterial" required>
         </div>
 
         <div>
             <label for="frecuencia_cardiaca">Frecuencia Cardíaca  &nbsp; &nbsp; </label>
-            <input type="text" id="frecuencia_cardiaca" name="frecuencia_cardiaca">
+            <input type="text" id="frecuencia_cardiaca" name="frecuencia_cardiaca" required>
         </div>
 
         <div>
             <label for="oxigeno_sangre">Oxígeno en Sangre  &nbsp; &nbsp; </label>
-            <input type="number" id="oxigeno_sangre" name="oxigeno_sangre">
+            <input type="number" id="oxigeno_sangre" name="oxigeno_sangre" required>
         </div>
     </fieldset>
 
@@ -189,13 +194,8 @@
         <legend>Certificado de Apto Físico</legend>
 
         <div>
-            <label for="fecha">Fecha &nbsp; &nbsp; </label>
-            <input type="datetime-local" id="fecha" name="fecha">
-        </div>
-
-        <div>
             <label for="tipo">Tipo de Apto &nbsp; &nbsp; </label>
-            <input type="text" id="tipo" name="tipo">
+            <p>{{ form.tipo }}</p>
         </div>
 
         <div>
@@ -204,33 +204,46 @@
         </div>
     </fieldset>
 
-            <button type="submit">Guardar</button>
-        </form>
+        {% if errors %}
+                {% for error in errors %}
+                    <samp>{{ error }}</samp>
+                {% endfor %}
+            {% else %}
+                <samp></samp>
+            {% endif %}
 
-    </div>
+            <button type="submit" id='grabar-btn' style="display: none;">Guardar</button> 
+        
+
+        <div class='container stylecam'>
+
+            <h2 id="user-info">Requiere reconocimiento facial</h2>
+
+            <div class="videoWrapper">
+                <div class="info">
+                    <a href="#" class='btn btn-primary btn-lg habilitarCam' id='habilitar'>Cámara</a>
+                </div>
+                <div class='videoElement'>
+                    <video id='videoElement' autoplay='true'></video>
+                </div>
+                <div class="capturarInfo">
+                    <a href="#" class='btn btn-primary btn-lg capturarCam' id='capturar' style="display: none;">Tomar Foto</a>
+                </div>
+            </div>
+            <div class='canvasElement'>
+                <canvas id='canvasElement' height='200' width='200'></canvas>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+    <script src='{% static "js/camara.js" %}'></script> 
 
     {% else %}
-            <div class='separador-m-datos'></div>
-            <div class='container btn btn-new'>
-            <a href={% url 'alta-deportista' %} id='reg-new'>Registrarlo</a>
-            </div>
-            <div class='separador-m-datos'></div>
+            <div class='separador8'></div> 
+            
     {% endif %}
-
-    <div class='separador3'></div>
-
-    {% comment %} <main id='register'>
-        <form>
-
-        {% csrf_token %}
-            <section id='seccion' role="region" aria-labelledby="user-info">
-
-            {{ form.as_p }}
-
-            </section>
-
-        </form>
-    </main> {% endcomment %}
 
 {% endblock %}
 

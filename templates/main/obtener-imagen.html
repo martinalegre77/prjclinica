@@ -1,0 +1,44 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+{% block bloque_principal %}
+
+    {% csrf_token %}
+
+    {% block titulo_principal %}
+
+    <div display='flex' justify-content='center' align-items='center'>
+    
+    <p class="tit-page">Centre su cara dentro de la imagen</p>
+
+    {% comment %} <div class='separador5'></div> {% endcomment %}
+    
+    {% endblock titulo_principal %}</p>
+
+    <div class='container obtener'>
+        <video id="video_r" width='720' height='560' autoplay muted></video>
+    </div> 
+
+    <script>
+        // Variable global con la URL de la imagen y el formulario heredado
+        const imageUrl = "{{ user.image.url }}";
+        const formulario = "{{ form_data }}";
+        const deportista = "{{ deportista }}"
+    </script>
+
+    <div class='separador10'></div>
+
+    </div>
+
+{% comment %} <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+<script src="{% static 'js/face-api.js' %}"></script> {% endcomment %}
+
+<script>
+    // let formData = {{ form_data|safe }};
+    let csrfToken = '{{ csrf_token }}';
+</script> 
+
+<script type="module" src="{% static 'js/reconocimiento.js' %}"></script> 
+
+{% endblock bloque_principal %}

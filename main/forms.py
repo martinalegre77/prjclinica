@@ -1,3 +1,4 @@
+from django import forms
 from django.forms import ModelForm
 from .models import Deporte, Deportista, Evaluacion, Institucion, Usuario
 
@@ -28,9 +29,25 @@ class DeportistaForm(ModelForm):
     class Meta:
         model = Deportista
         fields = '__all__'
+        widgets = {
+            'fecha_nac': forms.DateInput(attrs={
+                'class': 'form-control', 
+                'placeholder': 'Mes/Dia/Año'
+            }),
+            'dni': forms.DateInput(attrs={
+                'class': 'form-control', 
+                'placeholder': 'Solo números, sin puntos'
+            }),
+            'telefono': forms.DateInput(attrs={
+                'class': 'form-control', 
+                'placeholder': 'Sin 0 y sin 15'
+            }),
+        }
 
 
 class EvaluacionForm(ModelForm):
     class Meta:
         model = Evaluacion
         fields = '__all__'
+
+

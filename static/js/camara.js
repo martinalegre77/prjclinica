@@ -1,16 +1,22 @@
 
+const habilitarButton = document.getElementById('habilitar');
+const capturarButton = document.getElementById('capturar');
 const video = document.getElementById('videoElement');
-let boton = document.getElementById('capturar');
 let canvas = document.getElementById('canvasElement');
 const form = document.getElementById('registrationForm');
+const grabarBtn = document.getElementById('grabar-btn');
+const titulo = document.getElementById('user-info')
 
-document.getElementById('habilitar').addEventListener('click', ()=> {
+// Ocultar el botón 'Cámara' y mostrar el video al hacer clic en 'Cámara'
+habilitarButton.addEventListener('click', function(event) {
+    event.preventDefault();
+    habilitarButton.style.display = 'none';
     habilitarCamara();
-})
-
+});
 
 function habilitarCamara() {
     canvas.style.display = 'none';
+    capturarButton.style.display = 'block';
     navigator.mediaDevices.getUserMedia({ audio: false,
                                             video: {
                                                 facingMode: 'user',
@@ -32,14 +38,19 @@ function habilitarCamara() {
 }
 
 
-document.getElementById('capturar').addEventListener('click', ()=> {
+capturarButton.addEventListener('click', (event)=> {
+    event.preventDefault();
     takePicture();
-    boton.style.display = 'none';
+    video.style.display = 'none';
+    capturarButton.style.display = 'none';
     canvas.style.display = 'inline-block';
+    grabarBtn.style.display = 'block';
+    
 })
 
 
 function takePicture() {
+    titulo.style.display = 'none';
     let ctx = canvas.getContext('2d');
     ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
 }
