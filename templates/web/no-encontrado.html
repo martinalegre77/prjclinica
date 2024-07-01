@@ -1,0 +1,17 @@
+
+{% extends 'web/base.html' %} 
+
+{% load static %}
+
+{% block bloque_principal %}
+
+    <a href={% url 'index' %} class="boton-flotante">Volver</a>
+        
+    <p class="tit-page">{% block titulo_principal %}Deportista no encontrado{% endblock %}</p>
+
+    
+    <img src='{% static "img/depor-no-found.png" %}' class="rounded mx-auto d-block not_found" alt="user_not_found">
+
+    <samp>EL deportista con DNI <kbd>{{ qr }}</kbd> no posee certificados vigentes.</samp>
+
+{% endblock %}

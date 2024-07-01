@@ -155,6 +155,7 @@ def index(request, template_name='main/index.html'):
 
 def login_view(request, template_name='main/login.html'):
     """ Logín para entrar al sistema"""
+    logout(request)
     if request.method == 'GET':
         return render(request, template_name)
     else:
@@ -243,7 +244,6 @@ def registro(request, id, template_name='main/registro.html'):
 @login_required
 def re_login(request, template_name='main/re-login.html'):
     """ Información registrada correctamente"""
-    logout(request)
     return render(request, template_name)
 
 

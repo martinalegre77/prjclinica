@@ -1,11 +1,22 @@
 
-
 function onScanSuccess(qrCodeMessage) {
     // Manejar el resultado del escaneo
     console.log("Código QR escaneado:", qrCodeMessage);
-    document.getElementById('result').innerHTML = `Código QR Escaneado: ${qrCodeMessage}`;
-    // Detener el escaneo una vez se ha escaneado el código QR
-    html5QrcodeScanner.clear();
+
+    // Verificar si el código QR tiene exactamente 8 números
+    const regex = /^[0-9]{8}$/;
+    if (!regex.test(qrCodeMessage)) {
+        // Redirigir a la página 'no-encontrado.html'
+        window.location.href = '/no-encontrado.html';
+        return;
+    }
+
+    // Redirigir a la página 'consulta-deportista.html' y agregar el número escaneado o 0
+    window.location.href = `/municipalidad/consulta-deportista/${qrCodeMessage}`;
+
+    // document.getElementById('result').innerHTML = `Código QR Escaneado: ${qrCodeMessage}`;
+    // // Detener el escaneo una vez se ha escaneado el código QR
+    // html5QrcodeScanner.clear();
 }
 
 function onScanError(errorMessage) {

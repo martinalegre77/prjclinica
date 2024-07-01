@@ -1,0 +1,34 @@
+
+{% extends 'web/base.html' %} 
+
+{% load static %}
+
+{% block bloque_principal %}
+
+    <a href={% url 'index' %} class="boton-flotante">Volver</a>
+
+        
+    <p class="tit-page">{% block titulo_principal %}Aptos Físicos{% endblock %}</p>
+
+    <p class='titulo-resultado'>Datos del Deportista</p>
+
+    <div class='container c-datos'>
+
+        <samp class='datos'><kbd>APTITUD:</kbd>&nbsp;&nbsp;  {{ apto.upper }}</samp>
+
+        <samp class='datos'><kbd>NOMBRE:</kbd>&nbsp;&nbsp;  {{ nombre }}</samp>
+
+        <samp class='datos'><kbd>APELLIDO:</kbd>&nbsp;&nbsp;  {{ apellido }}</samp>
+
+        <samp class='datos'><kbd>D.N.I.:</kbd>&nbsp;&nbsp;  {{ dni }}</samp>
+
+        <samp class='datos'><kbd>FECHA DE NACIMIENTO:</kbd>&nbsp;&nbsp;  {{ nac }}</samp>
+
+        <samp class='datos'><kbd>EDAD:</kbd>&nbsp;&nbsp;  {{ edad }}</samp>
+
+        <samp class='datos vence'>Este certificado se realizó el <kbd> {{ fecha }} </kbd>.</samp>
+    
+    </div>
+
+
+{% endblock %}
