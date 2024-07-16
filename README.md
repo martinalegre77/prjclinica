@@ -1,4 +1,4 @@
-Instalación🤖
+Descarga o clonación del proyecto🤖
 
 Con entorno virtual:
 
@@ -6,36 +6,36 @@ Con entorno virtual:
 
    python3 -m venv [nombreDelEntornoVirtual]
 
-- este comando creara un entorno virtual para para poder importar posteriormente los paquetes.
+- este comando creara un entorno virtual donde se instalaran posteriormente los paquetes.
 
 2. Para activarlo se emplea el siguiente comando:
 
    source nombreDelEntornoVirtual/bin/activate
 
-- NOTA: en caso de trabajar con windows el entorno virtual se genera con scripts para activar el entorno virtual por ende se tiene que acceder de la siguiente forma:
+- NOTA: en caso de trabajar con Windows, para activar el entorno virtual se ingresa el siguiente comando:
 
   nombreDelEntornoVirtual\Scripts\activate.bat
 
-3. para apagarlo (en ambos casos) es:
+3. Para apagarlo (en ambos casos):
 
   deactivate
 
   Sin entorno virtual comenzar desde acá:
 
-4. Despues correr el siguiente comando para obtener los paquetes empleados en la API:
+4. Después correr el siguiente comando para obtener los paquetes empleados en la App:
 
    pip install -r requirements.txt
 
-5. Clonar el repositorio
+5. Clonar el repositorio:
 
    git clone https://github.com/martinalegre77/prjclinica.git
 
-6. Probar hacer migraciones
+6. Hacer migraciones:
 
    python manage.py makemigrations
    python manage.py migrate
 
-7. Arrancar el servidor Django
+7. Arrancar el servidor Django:
 
    python manage.py runserver
 
