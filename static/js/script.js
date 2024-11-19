@@ -1,4 +1,4 @@
-// const $tiempo = document.querySelector('.tiempo');
+// Insertar fecha actual en páginas
 const $fecha = document.querySelector('.fecha');
 
 function Relojdigital(){
@@ -9,10 +9,6 @@ function Relojdigital(){
     diaSemana = f.getDay();
 
     dia = ('0' + dia).slice(-2);
-    // mes = ('0' + mes).slice(-2)
-
-    // let timeString = f.toLocaleTimeString();
-    // $tiempo.innerHTML = timeString;
 
     let semana = ['DOMINGO','LUNES','MARTES','MIERCOLES','JUEVES','VIERNES','SABADO'];
     let nom_mes = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',

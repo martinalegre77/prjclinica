@@ -5,7 +5,7 @@
 
 {% block bloque_principal %}
 
-    <p class="tit-page">{% block titulo_principal %}Sistema de Aptos Físicos{% endblock %}</p>
+    <p class="tit-page">{% block titulo_principal %}Gestión de Certificados{% endblock %}</p>
 
     <div class='separador3'></div>
 
@@ -13,7 +13,7 @@
         <form method="post">
         {% csrf_token %}
             <section id='seccion' role="region" aria-labelledby="user-info">
-                <h2 id="user-info">Ingrese el DNI:</h2>
+                <h2 id="user-info">Ingrese el DNI del paciente:</h2>
                 
                 <div class="info ingreso-dni">
                     <label for="user">DNI:</label>
@@ -27,17 +27,15 @@
 
                 {% if medico %}
                     <div class='btn-consultar'>
-                        <button class='consultar' type="submit">Buscar/Nuevo</button>
+                        <button class='consultar' type="submit">Buscar / Nuevo</button>
                     </div>
                 {% else %}
                     <div class='btn-consultar'>
-                        <button class='consultar' type="submit">Buscar/Nuevo</button>
+                        <button class='consultar' type="submit">Buscar / Nuevo</button>
                     </div>
                 {% endif %}
 
                 <h2 id="user-info">Ir a Instituciones</h2>
-
-                {% comment %} <a href={% url 'instituciones' %} class="btn btn-primary">Instituciones</a> {% endcomment %}
 
                 <button class='registrar'><a href={% url 'listar-instituciones' %}>Instituciones</a></button>
 

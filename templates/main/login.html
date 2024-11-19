@@ -4,12 +4,8 @@
 {% load static %}
 
 {% block bloque_principal %}
-
-    {% comment %} <a href="municipalidad/scan-aptos" class="boton-flotante">Aptos Físicos</a> {% endcomment %}
-
-
         
-    <p class="tit-page">{% block titulo_principal %}Acceso a la Clínica{% endblock %}</p>
+    <p class="tit-page">{% block titulo_principal %}Acceso al Sistema de Aptos Físicos{% endblock %}</p>
 
     <div class='separador2'></div>
 
@@ -37,10 +33,6 @@
             {% endif %}
             <input type="password" class="form-control" id="InputPassword" name='password' required>
         </div>
-        {% comment %} <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-            <label class="form-check-label" for="exampleCheck1">Check me out</label>
-        </div> {% endcomment %}
         <button type="submit" class="btn btn-primary" value='Ingresar'>Ingresar</button>
         <br>
         <div id="Help" class="form-text">Si olvidó sus credenciales por favor comuníquese con el Administrador</div>
@@ -49,5 +41,3 @@
     <div class='separador-final'></div>
 
 {% endblock %}
-
-{% comment %} {% block titulo_principal %}Clinica Municipal para el Deportista{% endblock %} {% endcomment %}

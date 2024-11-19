@@ -78,6 +78,7 @@
                     {% if evaluacion.certificado_file %}
                         <p class="tit-page">Certificado expedido</p>
                         <img src="{{ evaluacion.certificado_file.url }}" alt="Certificado de Apto Físico" id='img-cert'>
+                        <div class='separador5'></div>
                     {% endif %}
                 {% endfor %}
                 {% if user.medico %}
@@ -102,7 +103,7 @@
     {% else %}
             <div class='separador-m-datos'></div>
             <div class='container btn btn-new'>
-            <a href={% url 'add-deportista' %} id='reg-new'>Registrarlo</a>
+            <a href={% url 'add-deportista' %} id='reg-new'>Ingresar datos</a>
             </div>
             <div class='separador-m-datos'></div>
     {% endif %}

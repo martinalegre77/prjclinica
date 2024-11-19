@@ -1,42 +1,62 @@
-import json
-from django.http import JsonResponse
-from django.shortcuts import redirect, render
-from .forms import DeporteForm, DeportistaForm, InstitucionForm, UsuarioForm, EvaluacionForm
 from .models import *
+from .forms import DeporteForm, DeportistaForm, InstitucionForm, UsuarioForm, EvaluacionForm
+
+from django.shortcuts import redirect, render
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required # para autenticacion
-import re
+from django.contrib.auth.hashers import check_password
 from django.core.files.base import ContentFile
-from django.contrib.auth import login, logout 
+from django.contrib.auth import login, logout, update_session_auth_hash 
 from django.views.decorators.csrf import csrf_protect
-# import face_recognition
-# Para QR y certificado
+
+# Para validar mail
+import re
+
+# Para convertir datos del formulario
+from decimal import Decimal, InvalidOperation
+
+# Para certificado
 from PIL import Image 
 from PIL import ImageDraw
 from PIL import ImageOps 
-from PIL import ImageFont 
-from datetime import datetime
-import time
-import qrcode # libreria Qr
+from PIL import ImageFont
+
+# Para Qr
+import qrcode 
+
+# Para cambiar zona horaria 
+from django.utils import timezone
+
+# Para reconocimiento facial
+import cv2
+import face_recognition
 
 
-############### VARIABLES ######################
-
+# VARIABLES
 TIPO_APTO_CHOISE = {
     'A': 'APTO sin restricciones',
     'B': 'AUTORIZADO con recomendación de evaluación y/o tratamiento médico',
     'C': 'NO AUTORIZADO hasta completar la evaluación, tratamiento y/o rehabilitación'
 }
 
+LEYENDA = {
+    'A': ['APTO', ''],
+    'B': ['AUTORIZADO', 'con recomendación de evaluación y/o tratamiento médico'],
+    'C': ['NO AUTORIZADO', 'hasta completar la evaluación, tratamiento y/o rehabilitación']
+}
+
+
 TIPO_MATRICULA_CHOISE = {
     '1': 'M.N.',
     '2': 'M.P.'
 }
 
-DIR_REC = './media/recursos/' # carpeta para guardar las imágenes
-DIR_CER = './media/certificados/' # carpeta para guardar las imágenes
+DIR_REC = './media/recursos/' # carpeta de recursos de imágenes
+DIR_CER = './media/certificados/' # carpeta para guardar los certificados
+DIR_FAC = './media/images/' # carpeta para guardar las fotos de reconocimiento
 
-############### FUNCIONES ######################
+
+# FUNCIONES 
 def comprobar_contrasena(password):
     may = False
     num = False
@@ -82,16 +102,23 @@ def certificado_doc(apellido, nombres, dni, fecha_nac, apto, fecha_hoy, medico, 
         dibujo.text((330, 270), texto_nombres, font=fuente, fill='black')
         # DNI
         fuente = ImageFont.truetype(DIR_REC + 'UbuntuMono-Bold.ttf', size=36, encoding='utf-8')
-        texto_dni = f'{dni}'
+        texto_dni = f'{format_dni(dni)}'
         dibujo.text((130, 310), texto_dni, font=fuente, fill='black')
         # nacimiento
         fuente = ImageFont.truetype(DIR_REC + 'UbuntuMono-Bold.ttf', size=36, encoding='utf-8')
         texto_nac = f'{fecha_nac}'
         dibujo.text((950, 310), texto_nac, font=fuente, fill='black')
         # apto
-        fuente = ImageFont.truetype(DIR_REC + 'UbuntuMono-Bold.ttf', size=60, encoding='utf-8')
-        texto_apto = f'{apto}'
-        dibujo.text((500, 1250), texto_apto, font=fuente, fill='black')
+        fuente1 = ImageFont.truetype(DIR_REC + 'UbuntuMono-Bold.ttf', size=60, encoding='utf-8')
+        texto_apto_1 = f'{LEYENDA[apto][0]}'
+        bbox1 = dibujo.textbbox((0, 0), texto_apto_1, font=fuente1)
+        ancho1 = bbox1[2] - bbox1[0]
+        dibujo.text((850 - ancho1//2, 1220), texto_apto_1, font=fuente1, fill='black')
+        fuente2 = ImageFont.truetype(DIR_REC + 'UbuntuMono-Bold.ttf', size=48, encoding='utf-8')
+        texto_apto_2 = f'{LEYENDA[apto][1]}'
+        bbox2 = dibujo.textbbox((0, 0), texto_apto_2, font=fuente2)
+        ancho2 = bbox2[2] - bbox2[0]
+        dibujo.text((850 - ancho2//2, 1300), texto_apto_2, font=fuente2, fill='black')
         # fecha
         fuente = ImageFont.truetype(DIR_REC + 'UbuntuMono-Bold.ttf', size=36, encoding='utf-8')
         texto_fecha = f'{fecha_hoy}'
@@ -103,7 +130,6 @@ def certificado_doc(apellido, nombres, dni, fecha_nac, apto, fecha_hoy, medico, 
         dibujo.text((1170, 1460), texto_medico, font=fuente, fill='black')
         dibujo.text((1205, 1490), texto_mat, font=fuente, fill='black')
         # QR
-        # time.sleep(1)
         qr = Image.open(DIR_REC + f'QR_{dni}.png')
         # Eliminar el canal alfa 
         if qr.mode in ('RGBA', 'LA') or (qr.mode == 'P' and 'transparency' in qr.info):
@@ -113,29 +139,34 @@ def certificado_doc(apellido, nombres, dni, fecha_nac, apto, fecha_hoy, medico, 
         lienzo.paste(qr_reescalado, (600, 600))
         # guardamos la imagen 
         lienzo.save(DIR_CER + f'certificado_{dni}.png')
-        print('    Hecho')
-        
-
-# def reconocimiento(img1, img2):
-#     # Cargar las imágenes a comparar
-#     imagen1 = face_recognition.load_image_file("imagen1.jpg")
-#     imagen2 = face_recognition.load_image_file("imagen2.jpg")
-
-# # Obtener los encodings faciales de ambas imágenes
-# encodings_imagen1 = face_recognition.face_encodings(imagen1)
-# encodings_imagen2 = face_recognition.face_encodings(imagen2)
-
-# if len(encodings_imagen1) == 0 or len(encodings_imagen2) == 0:
-#     print("No se encontraron rostros en una de las imágenes.")
-# else:
-#     # Comparar los encodings faciales
-#     if face_recognition.compare_faces(encodings_imagen1, encodings_imagen2)[0]:
-#         print("Las fotos muestran a la misma persona.")
-#     else:
-#         print("Las fotos muestran a personas diferentes.")
 
 
-# Función para convertir valores de formulario a booleanos
+def reconocimiento(img):
+    # leer imagenes
+    image1 = cv2.imread(DIR_FAC + 'reconocimiento.png')
+    image2 = cv2.imread(img)
+    # reconocer rostros
+    face1 = face_recognition.face_locations(image1)[0]
+    face2 = face_recognition.face_locations(image2)[0]
+    # obtener los encodings faciales de ambas imágenes
+    face1_enc = face_recognition.face_encodings(image1, known_face_locations=[face1])[0]
+    face2_enc = face_recognition.face_encodings(image2, known_face_locations=[face2])[0]
+    # comprobar si hay rostros en las imágenes
+    if len(face1_enc) == 0 or len(face2_enc) == 0:
+        # No hay rostros
+        return False
+    else:
+        # compara los rostros
+        resultado = face_recognition.compare_faces([face1_enc], face2_enc) 
+        if resultado[0]:
+            # Las fotos muestran a la misma persona
+            return True
+        else:
+            # Las fotos muestran a personas diferentes
+            return False
+
+
+# Convertir valores de formulario a booleanos
 def to_bool(value):
     if value in ['true', 'True', '1', True]:
         return True
@@ -145,32 +176,63 @@ def to_bool(value):
         return value
     else:
         return None
+    
+
+# Formateo de número de DNI (agregar puntos)
+def format_dni(dni):
+    numero = int(dni)
+    format = f"{numero:,}".replace(",", ".") 
+    return format 
 
 
-############### INDEX - LOGIN ######################
+# VISTAS # GENERALES 
+
 def index(request, template_name='main/index.html'):
     """ Página de inicio de la clínica"""
+    logout(request)
     return render(request, template_name)
 
 
 def login_view(request, template_name='main/login.html'):
     """ Logín para entrar al sistema"""
     logout(request)
+
     if request.method == 'GET':
         return render(request, template_name)
     else:
+        # method = POST
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        
         try:
-            user = Usuario.objects.get(username__exact = request.POST['username'], password__exact = request.POST['password'])
-        except Usuario.DoesNotExist:
-            user = request.POST['username']
-            return redirect('not-found', user)
-        else:
-            if user.user_temp:
-                login(request, user)
-                return redirect('registro', id=user.pk)
-            else:
+            # Buscar el usuario en la base de datos
+            user = Usuario.objects.get(username=username)
+            
+            # Comprobar si la contraseña ingresada coincide con la encriptada
+            if check_password(password, user.password):
+
+                # Iniciar sesión si las contraseñas coinciden
                 login(request, user)
                 return redirect('menu')
+            
+                # Iniciar sesión si las contraseñas (formato plano) coinciden
+            elif password == user.password and not user.user_temp:
+                login(request, user)
+                return redirect('menu')
+            
+                # Ir al registro si la contraseña no está encriptada
+            elif password == user.password and user.user_temp:
+                login(request, user)
+                return redirect('registro', id=user.pk)        
+            
+                # Ir a usuario no encontrado si hay error
+            else:
+                return redirect('not-found', username)
+            
+        except Usuario.DoesNotExist:
+
+            # Ir a usuario no encontrado
+            return redirect('not-found', username)
 
 
 def not_found(request, user, template_name='main/not-found.html'):
@@ -178,18 +240,24 @@ def not_found(request, user, template_name='main/not-found.html'):
     ctx = {'user': user}
     return render(request, template_name, ctx)
 
+
 @csrf_protect
 @login_required
 def registro(request, id, template_name='main/registro.html'):
     """ Registro de usuarios """
     user = Usuario.objects.get(id = id)
     medico = user.medico
+
     if request.method == 'GET':
         form = UsuarioForm(instance=user)
-        return render(request, template_name, {'form': form, 'medico': medico})
-    else:
+        return render(request, template_name, {'form': form, 
+                                                'medico': medico, 
+                                                'post_method': False})
+    
+    if request.method == 'POST':
         errors = []
-        form = UsuarioForm(request.POST, instance=user)
+        form = UsuarioForm(request.POST)
+
         # Validación de datos
         if len(request.POST.get('nombres')) < 3 :
             errors.append('Ingrese un nombre válido')
@@ -198,52 +266,79 @@ def registro(request, id, template_name='main/registro.html'):
         elif not comprobar_contrasena(request.POST.get('newpass')) :
             errors.append('La contraseña debe tener al menos una mayúscula, una minúscula, un número y ser de al menos 8 caracteres')
         elif not medico:
+
             # si no es médico guardo los datos
             try:
-                Usuario.objects.filter(id=user.pk).update(password = request.POST.get('newpass'),
-                                                            user_temp = False,
-                                                            apellido = request.POST.get('apellido'),
-                                                            nombres = request.POST.get('nombres')
-                                                            )
+                user.set_password(request.POST.get('newpass'))
+                user.apellido = request.POST.get('apellido')
+                user.nombres = request.POST.get('nombres')
+                user.user_temp = False
+                
+                user.save()
+
+                # mantenerlo logueado al usuario 
+                update_session_auth_hash(request, user)
+
+                # Redireccionamiento
                 return redirect('re-login')
-            except:
-                errors.append('Ha ocurrido un error al intentar guardar los datos, intente nuevamente.')
-        # si es médico sigo validando
+
+            except Exception as e:
+                errors.append(f'Ha ocurrido un error al intentar guardar los datos, intente nuevamente: {str(e)}.')
+
+        # si es médico valido campos adicionales
         elif not request.POST.get('tipo_matricula'):
             errors.append('Debe seleccionar un tipo de matrícula')
         elif not request.POST.get('matricula') or len(request.POST.get('matricula')) < 4:
-            print('Error de matricula')
             errors.append('Debe ingresar un número de matrícula válido')
         elif len(request.POST.get('especialidad')) < 6 :
             errors.append('Debe ingresar una especialidad válida')
         elif not validar_email(request.POST.get('mail')):
             errors.append('Debe ingresar una dirección de mail válida')
-        elif not 'image' in request.FILES:
+        
+        elif 'image' not in request.FILES:
             errors.append('Debe tomarse una foto')
+
+        # Si no hay errores, guardar los datos del médico
         else:
             image = request.FILES['image']
             try:
                 user.image.save('foto.png', ContentFile(image.read()))
-                Usuario.objects.filter(id=user.pk).update(password = request.POST.get('newpass'),
-                                                                    user_temp = False,
-                                                                    apellido = request.POST.get('apellido'),
-                                                                    nombres = request.POST.get('nombres'),
-                                                                    tipo_matricula = request.POST.get('tipo_matricula'),
-                                                                    matricula = request.POST.get('matricula'),
-                                                                    especialidad = request.POST.get('especialidad'),
-                                                                    telefono = request.POST.get('telefono'),
-                                                                    mail = request.POST.get('mail')
-                                                                    )
-                return redirect('re-login')
-            except:
-                errors.append('Ha ocurrido un error al intentar guardar los datos, intente nuevamente.')
-        return render(request, template_name, {'form': form, 'medico': medico, 'errors': errors})
 
+                # Guardar contraseña cifrada y otros datos del médico
+                user.set_password(request.POST.get('newpass'))
+                user.apellido = request.POST.get('apellido')
+                user.nombres = request.POST.get('nombres')
+                user.tipo_matricula = request.POST.get('tipo_matricula')
+                user.matricula = request.POST.get('matricula')
+                user.especialidad = request.POST.get('especialidad')
+                user.telefono = request.POST.get('telefono')
+                user.mail = request.POST.get('mail')
+                user.user_temp = False
+                
+                user.save()
+
+                # mantenerlo logueado al usuario 
+                update_session_auth_hash(request, user)
+
+                # Redireccionamiento
+                return redirect('re-login')
+            
+            except Exception as e:
+                errors.append(f'Ha ocurrido un error al intentar guardar los datos, intente nuevamente: {str(e)}.')
+        
+        # # Si hay errores, renderizar nuevamente el formulario
+        return render(request, template_name, {'errors': errors,
+                                                'form': form, 
+                                                'medico': medico,
+                                                'post_method': True 
+                                                })
+    
 
 @csrf_protect
 @login_required
 def re_login(request, template_name='main/re-login.html'):
     """ Información registrada correctamente"""
+    # logout(request)
     return render(request, template_name)
 
 
@@ -254,27 +349,28 @@ def cerrar_sesion(request):
     return redirect('login')
 
 
-############### FUNCIONALIDAD APP ######################
+# VISTAS # FUNCIONALES
+
 @csrf_protect
 @login_required
 def menu(request, template_name='main/menu.html'):
     if request.method == 'POST':
         errors = []
         dni = request.POST.get('dni')
-        if len(dni) < 8:
-            errors.append('Debe ingresar un DNI válido.')
+        if not dni.isdecimal():
+            errors.append('Debe ingresar sólo números, sin puntos')
+        elif len(dni) != 8:  
+            errors.append('Debe ingresar un DNI válido')
         else:
             return redirect('mostrar', dni)
         return render(request, template_name, {'errors': errors})
     else:
-        # form = DeportistaForm()
         return render(request, template_name)
 
 
 @csrf_protect
 @login_required
 def mostrar(request, dni, template_name='main/mostrar.html'):
-    # paginator = Paginator()
     usuario = request.user
     try:
         deportista = Deportista.objects.get(dni=dni)
@@ -287,7 +383,11 @@ def mostrar(request, dni, template_name='main/mostrar.html'):
     except Deportista.DoesNotExist:
         evaluaciones = None
 
-    return render(request, template_name, {'form': form, 'dni': dni, 'deportista': deportista, 'evaluaciones': evaluaciones, 'user': usuario})
+    return render(request, template_name, {'form': form, 
+                                            'dni': format_dni(dni), 
+                                            'deportista': deportista, 
+                                            'evaluaciones': evaluaciones, 
+                                            'user': usuario})
 
 
 @csrf_protect
@@ -295,47 +395,87 @@ def mostrar(request, dni, template_name='main/mostrar.html'):
 def evaluacion(request, id, template_name='main/evaluacion.html'):
     usuario = request.user
     deportista = Deportista.objects.get(id=id)
+    errors = []
 
+    # Si el método es GET
     if request.method == 'GET':
         form = EvaluacionForm()
-        return render(request, template_name, {'form': form, 'user': usuario, 'deportista': deportista})
+        return render(request, template_name, {'form': form, 
+                                                'user': usuario, 
+                                                'deportista': deportista, 
+                                                'dni': format_dni(deportista.dni), 
+                                                'post_method': False})
+    
+    # Si el método es POST
     else:
         form = EvaluacionForm(request.POST)
-        errors = []
-        required_fields = ['estado_general', 'talla', 'peso', 'presion_arterial', 'frecuencia_cardiaca', 'oxigeno_sangre']
-        for field in required_fields:
-            if not request.POST.get(field):
-                errors.append(f'El campo {field.replace("_", " ").upper()} es obligatorio')
-        # if not 'image' in request.FILES:
-        #     errors.append('Debe tomarse una foto')
-        # else:
-        #     try:
-        #         # Acá analiza las fotos
-        #         image = request.FILES['image']
-        #         # image_url = usuario.image.url
-        #         # Llama a la función
-        #         # if not match:
-        #         # return redirect('error-reconocimiento', id)
-        #     except:
-        #         # No hay fotos
-        #         return redirect('error-reconocimiento', id)
+
+        if not request.POST.get('estado_general'):
+            errors.append('El campo "Estado General" es obligatorio')
+        elif not request.POST.get('presion_arterial'):
+            errors.append('El campo "Presión Arterial" es obligatorio')
+        elif not request.POST.get('frecuencia_cardiaca'):
+            errors.append('El campo "Frecuencia Cardíaca" es obligatorio')
+        elif not 'image' in request.FILES:
+            errors.append('Debe tomarse una foto')
+        elif not request.POST.get('observaciones'):
+            errors.append('El campo Observaciones es obligatorio')
+        else:
+        # pasar a decimal talla, peso y oxígeno
+            try:
+                talla = Decimal(request.POST.get('talla'))
+                if talla < 1 or  talla > 2.4:
+                    errors.append('Debe ingresar la altura en metros utilizando el punto decimal para los centimetros')
+            except InvalidOperation:
+                errors.append('Debe ingresar la altura en metros utilizando el punto decimal para los centimetros')
+            try:
+                peso = Decimal(request.POST.get('peso'))
+                if peso < 30 or  peso > 150:
+                    errors.append('Debe ingresar el peso en kilogramos utilizando el punto decimal para los gramos')
+            except InvalidOperation:
+                errors.append('Debe ingresar el peso en kilogramos utilizando el punto decimal para los gramos')
+            try:
+                oxigeno = int(request.POST.get('oxigeno_sangre'))
+                if oxigeno < 75 or  oxigeno > 100:
+                    errors.append('Debe ingresar la saturación de oxígeno utilizando solo números')
+            except InvalidOperation:
+                errors.append('Debe ingresar la saturación de oxígeno utilizando solo números')
+
+        # NO hay errores
         if not errors:
-            # Hace certificado
-            fecha_actual = datetime.now()
+            try:
+                # manejo de imagenes
+                image_file = request.FILES['image']
+                image_fc = Image.open(image_file)
+                image_fc.save(DIR_FAC + 'reconocimiento.png')
+                image_path = usuario.image.path    
+                if not reconocimiento(image_path):
+                    print("No es la misma persona")
+                    return redirect('error-reconocimiento', id)
+            except Exception as e:
+                print("Error en el reconocimiento")
+                return redirect('error-reconocimiento', id)
+            
+            # Si el reconocimiento es true hace el certificado
+            fecha_actual = timezone.now()
             fecha_formateada = fecha_actual.strftime("%d/%m/%Y")
             fecha_nacimiento = deportista.fecha_nac
             fecha_nac_formt = fecha_nacimiento.strftime("%d/%m/%Y")
             crear_qr(deportista.dni)
+            
             for clave, valor in TIPO_APTO_CHOISE.items():
                 if clave == request.POST.get('tipo'):
-                    tipo_apto = valor
+                    leyenda_apto = clave
                     break
+            
             for clave, valor in TIPO_MATRICULA_CHOISE.items():
                 if clave == usuario.tipo_matricula:
                     tipo_mat = valor
                     break
-            certificado_doc(deportista.apellido, deportista.nombres, deportista.dni, fecha_nac_formt, tipo_apto, 
+            
+            certificado_doc(deportista.apellido, deportista.nombres, deportista.dni, fecha_nac_formt, leyenda_apto, 
                             fecha_formateada, f'{usuario.apellido}, {usuario.nombres}', f'{tipo_mat} {usuario.matricula}')
+            
             # Grabar
             eval = Evaluacion(deportista = deportista, 
                                 # FAMILIARES
@@ -385,7 +525,8 @@ def evaluacion(request, id, template_name='main/evaluacion.html'):
                                 oxigeno_sangre = request.POST.get('oxigeno_sangre'),
                                 # CERTIFICADO DE APTO FISICO
                                 medico = usuario,
-                                tipo = tipo_apto,
+                                tipo = request.POST.get('tipo'),
+                                # fecha = fecha_actual,
                                 observaciones = request.POST.get('observaciones'))                    
             eval.save()
             # Guardo certificado
@@ -394,8 +535,17 @@ def evaluacion(request, id, template_name='main/evaluacion.html'):
                 image = ContentFile(f.read())
             eval.certificado_file.save(f'certificado_{deportista.dni}.png', ContentFile(image.read()))
             return redirect('guardado')
+
+        # HAY errores
         else:
-            return render(request, template_name, {'form': form, 'errors': errors, 'deportista': deportista})
+            print("Hay errores")
+            print(errors)
+            return render(request, template_name, {'form': form, 
+                                                    'user': usuario, 
+                                                    'deportista': deportista,
+                                                    'dni': format_dni(deportista.dni), 
+                                                    'errors': errors, 
+                                                    'post_method': True})
 
 
 @csrf_protect
@@ -406,8 +556,9 @@ def guardado(request, template_name='main/guardado.html'):
 
 @csrf_protect
 @login_required
-def error_reconocimiento(request, id, template_name='error_reconocimiento.html'):
-    return render(request, template_name, {'user_id': id})
+def error_reconocimiento(request, id, template_name='main/error-reconocimiento.html'):
+    usuario = request.user
+    return render(request, template_name, {'usuario': usuario, 'deportista_id': id})
 
 
 ############### DEPORTISTA ######################
@@ -445,6 +596,7 @@ def editar_deportista(request, id, template_name='main/add-deportista.html'):
     except ObjectDoesNotExist as e: 
         error = 'No se encontraron datos del deportista'
     return render(request, template_name, {'form': form, 'error': error})
+
 
 ############### INSTITUCIONES ######################
 @csrf_protect

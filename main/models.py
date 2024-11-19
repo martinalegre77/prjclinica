@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
@@ -208,4 +209,5 @@ class Evaluacion(models.Model):
         verbose_name_plural = 'Evaluaciones'
 
     def __str__(self):
-        return f'{self.deportista}. Fecha: {self.fecha}. Médico interviniente: {self.medico}. Nro certificado: {self.pk}.'
+        fecha_local = timezone.localtime(self.fecha)  # Convierte la fecha a la zona horaria local
+        return f'{self.deportista}. Fecha: {fecha_local}. Médico interviniente: {self.medico}. Nro certificado: {self.pk}.'

@@ -49,5 +49,19 @@ class EvaluacionForm(ModelForm):
     class Meta:
         model = Evaluacion
         fields = '__all__'
+        widgets = {
+            'talla': forms.DateInput(attrs={
+                'class': 'form-control', 
+                'placeholder': 'Ej. 1.65'
+            }),
+            'peso': forms.DateInput(attrs={
+                'class': 'form-control', 
+                'placeholder': 'Ej. 70.500'
+            }),
+            'oxigeno_sangre': forms.DateInput(attrs={
+                'class': 'form-control', 
+                'placeholder': 'Ej. 96'
+            }),
+        }
 
 

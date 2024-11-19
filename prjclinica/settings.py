@@ -72,6 +72,7 @@ TEMPLATES = [
 ]
 
 LOGIN_URL = '/clinica/login/'
+LOGIN_REDIRECT_URL = '/clinica/re-login/'  # o a donde necesites redirigir después del login
 
 WSGI_APPLICATION = 'prjclinica.wsgi.application'
 
@@ -114,11 +115,13 @@ AUTH_USER_MODEL = 'main.Usuario'
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+# TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Argentina/Buenos_Aires'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = True # Esto permite que Django maneje las zonas horarias correctamente
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/

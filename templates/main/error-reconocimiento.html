@@ -4,7 +4,16 @@
 
 {% block bloque_principal %}
 
-<p>Error en el reconocimiento facial para el usuario con ID {{ user_id }}.</p>
-<a href="{% url 'evaluacion' user_id %}" class="btn btn-primary">Reintentar</a>
+    <a href={% url 'menu' %} class="btn btn-primary boton-flotante">Cancelar</a>
+
+    <p class="tit-page">{% block titulo_principal %}¡Error de reconocimiento!{% endblock %}</p>
+
+    <img src='{% static "img/no_face.png" %}' class="rounded mx-auto d-block not_found" alt="user_not_found">
+
+    <samp>No se pudo reconocer a <kbd>{{ usuario.apellido }}, {{ usuario.nombres }}</kbd>. Vuelva a intentarlo.</samp>
+
+    <a href="{% url 'evaluacion' deportista_id %}" class="btn btn-primary registrar">Reintentar</a>
+
+    <div class='separador4'></div>
 
 {% endblock %}

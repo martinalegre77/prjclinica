@@ -137,7 +137,6 @@ samp {
     margin: 2rem auto;
     text-align: center;
     color: red;
-
 }
 
 
@@ -297,7 +296,6 @@ input {
     background: #092954;
     border: 3px solid #3b3b4f;
     margin-bottom: 20px;  
-
 }
 
 
@@ -359,33 +357,6 @@ input {
     height: 188px;
     width: 100%;
 }
-
-/*
-.capturarCam {
-    display:none;
-    position: absolute;
-    bottom: -25px; 
-    left: 50%; 
-    transform: translateX(-50%); 
-    line-height: 20px; 
-}
-
-
-.videoElement {
-    position: fixed;
-    top: 65%; 
-    right: 25%; 
-    border-radius: 5px; 
-    z-index: 500; 
-}
-
-.canvasElement {
-    position: fixed;
-    top: 65%; 
-    right: 25%; 
-    border-radius: 5px; 
-    z-index: 999; 
-}*/
 
 
 /* LOGOUT */
@@ -587,4 +558,17 @@ textarea {
     border-radius: 3px; /* Bordes redondeados */
     cursor: pointer; /* Cambia el cursor al pasar por encima */
     padding: 6px 24px;
+}
+
+/*   */
+.error-messages {
+    color: red; /* Color para los mensajes de error */
+    background-color: #fdd; /* Fondo ligero para destacar */
+    padding: 10px;
+    border: 1px solid red;
+    border-radius: 5px;
+}
+
+.no-errors {
+    color: green; /* Color para el mensaje de éxito */
 }

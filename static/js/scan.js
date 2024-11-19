@@ -1,7 +1,7 @@
 
 function onScanSuccess(qrCodeMessage) {
     // Manejar el resultado del escaneo
-    console.log("Código QR escaneado:", qrCodeMessage);
+    // console.log("Código QR escaneado:", qrCodeMessage);
 
     // Verificar si el código QR tiene exactamente 8 números
     const regex = /^[0-9]{8}$/;
